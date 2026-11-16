@@ -63,6 +63,10 @@ body {
 section[id] {
   scroll-margin-top: 80px;
 }
+/* Sections receive focus after an in-page jump (for keyboard users); no ring needed there. */
+section[tabindex='-1']:focus {
+  outline: none;
+}
 
 /* Modal dialogs sit in the top layer, above the custom cursor, so give them the native one. */
 dialog {

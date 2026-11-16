@@ -1,107 +1,85 @@
-import { Component, Suspense, useEffect, useRef, useState, type ReactNode } from 'react'
+import { Component, Suspense, useEffect, useState, type ReactNode } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { Float, MeshDistortMaterial, Sparkles, Stars } from '@react-three/drei'
-import * as THREE from 'three'
-import { onScrollChange, scrollState } from './scroll'
+import { Environment, Lightformer, PerformanceMonitor, Sparkles, Stars, Stats } from '@react-three/drei'
+import { MathUtils } from 'three'
+import { gsap, onScrollChange } from './scroll'
 import { useReducedMotion } from './motion'
-
-const PALETTE = ['#7cf7c8', '#ff5ca8', '#f5b301', '#7cf7c8'].map((c) => new THREE.Color(c))
-
-/** Target position and size for each `data-core` spot, in viewport units. */
-function spotTarget(w: number) {
-  const wide = w > 7
-  if (scrollState.spot === 'hero') return wide ? { x: w * 0.24, y: 0, s: Math.min(w / 11, 1), o: 1 } : { x: 0, y: 1.55, s: 0.4, o: 1 }
-  // Phones/tablets have no free side, so the core sits behind the text: keep it faint.
-  if (!wide) return { x: 0, y: 0, s: 0.36, o: 0.3 }
-  const side = scrollState.spot === 'left' ? -1 : scrollState.spot === 'right' ? 1 : 0
-  return { x: side * w * 0.27, y: 0, s: side ? 0.8 : 0.9, o: 1 }
-}
-
-const setOpacity = (mesh: THREE.Mesh | null, o: number) => {
-  if (mesh) (mesh.material as THREE.Material).opacity = o
-}
-
-/** The hero object: a glowing distorted core wrapped in a wireframe shell and a ring. */
-function Core({ reduced }: { reduced: boolean }) {
-  const group = useRef<THREE.Group>(null)
-  const body = useRef<THREE.Mesh>(null)
-  const shell = useRef<THREE.Mesh>(null)
-  const ring = useRef<THREE.Mesh>(null)
-  const color = useRef(new THREE.Color())
-  const fade = useRef(1)
-
-  useFrame((state, dt) => {
-    const g = group.current
-    if (!g) return
-    const p = scrollState.progress
-    const t = spotTarget(state.viewport.width)
-    // With reduced motion the frame loop only runs on scroll, so snap instead of easing.
-    const ease = reduced ? Infinity : 3
-
-    g.position.x = THREE.MathUtils.damp(g.position.x, t.x, ease, dt)
-    g.position.y = THREE.MathUtils.damp(g.position.y, t.y + (reduced ? 0 : Math.cos(p * Math.PI * 3) * 0.25), ease, dt)
-
-    let s = t.s
-    if (!reduced) {
-      // Scroll spins it; mouse tilts it.
-      g.rotation.y += dt * 0.25 + scrollState.velocity * 0.01
-      g.rotation.x = THREE.MathUtils.damp(g.rotation.x, state.pointer.y * 0.4 + p * 3, 3, dt)
-      g.rotation.z = THREE.MathUtils.damp(g.rotation.z, -state.pointer.x * 0.3, 3, dt)
-      s *= 1 + Math.min(Math.abs(scrollState.velocity) * 0.02, 0.35)
-      if (shell.current) shell.current.rotation.y -= dt * 0.4
-      if (ring.current) ring.current.rotation.x += dt * 0.6
-    }
-    g.scale.setScalar(THREE.MathUtils.damp(g.scale.x, s, reduced ? Infinity : 6, dt))
-
-    fade.current = THREE.MathUtils.damp(fade.current, t.o, ease, dt)
-    setOpacity(body.current, fade.current)
-    setOpacity(shell.current, fade.current * 0.55)
-    setOpacity(ring.current, fade.current)
-
-    // Blend the accent colour through the page.
-    const k = p * (PALETTE.length - 1)
-    const i = Math.min(Math.floor(k), PALETTE.length - 2)
-    color.current.copy(PALETTE[i]).lerp(PALETTE[i + 1], k - i)
-    ;(shell.current?.material as THREE.MeshBasicMaterial | undefined)?.color.copy(color.current)
-    ;(ring.current?.material as THREE.MeshBasicMaterial | undefined)?.color.copy(color.current)
-  })
-
-  return (
-    <group ref={group} rotation={[0.35, 0, 0]}>
-      <Float speed={reduced ? 0 : 2} rotationIntensity={0.4} floatIntensity={1.2}>
-        <mesh ref={body}>
-          <icosahedronGeometry args={[1, 24]} />
-          <MeshDistortMaterial transparent color="#1a1a3a" emissive="#2b2bff" emissiveIntensity={0.45} roughness={0.2} metalness={0.8} distort={0.45} speed={reduced ? 0 : 2} />
-        </mesh>
-        <mesh ref={shell} scale={1.55}>
-          <icosahedronGeometry args={[1, 1]} />
-          <meshBasicMaterial wireframe transparent opacity={0.55} color="#7cf7c8" />
-        </mesh>
-        <mesh ref={ring} scale={2.3}>
-          <torusGeometry args={[1, 0.008, 8, 128]} />
-          <meshBasicMaterial transparent color="#7cf7c8" />
-        </mesh>
-      </Float>
-    </group>
-  )
-}
+import { viewTargets } from './events'
+import { hasWebGL, isCoarsePointer } from './webgl'
+import { consumeDirty, markDirty } from './three/frame'
+import Core from './three/Core'
+import Campus from './three/Campus'
+import { campusCamera, campusScene } from './three/campusView'
 
 /** Gentle camera parallax following the mouse (off with reduced motion). */
 function Rig({ reduced }: { reduced: boolean }) {
   useFrame((state, dt) => {
     if (reduced) return
     const { camera, pointer } = state
-    camera.position.x = THREE.MathUtils.damp(camera.position.x, pointer.x * 0.6, 2, dt)
-    camera.position.y = THREE.MathUtils.damp(camera.position.y, pointer.y * 0.4, 2, dt)
+    camera.position.x = MathUtils.damp(camera.position.x, pointer.x * 0.6, 2, dt)
+    camera.position.y = MathUtils.damp(camera.position.y, pointer.y * 0.4, 2, dt)
     camera.lookAt(0, 0, 0)
   })
   return null
 }
 
-/** In on-demand mode, draw a frame whenever scroll state changes. */
-function RedrawOnScroll() {
-  const invalidate = useThree((s) => s.invalidate)
-  useEffect(() => onScrollChange(() => invalidate()), [invalidate])
+/**
+ * Draws the main scene full-screen, then the campus scene scissored into the rect of its
+ * placeholder element. One WebGL context for the whole page.
+ */
+function Renderer() {
+  useFrame(({ gl, scene, camera, size }) => {
+    gl.setScissorTest(false)
+    gl.setViewport(0, 0, size.width, size.height)
+    gl.autoClear = true
+    gl.render(scene, camera)
+
+    const el = viewTargets.campus
+    if (!el) return
+    const b = el.getBoundingClientRect()
+    if (b.bottom <= 0 || b.top >= size.height || b.width < 4 || b.height < 4) return
+    const r = { left: b.left + 1, width: b.width - 2, height: b.height - 2 } // stay inside the 1px border
+    const bottom = size.height - b.bottom + 1
+    gl.setViewport(r.left, bottom, r.width, r.height)
+    gl.setScissor(r.left, bottom, r.width, r.height)
+    gl.setScissorTest(true)
+    gl.autoClear = false
+    gl.clearDepth() // keep the starfield behind the map, but draw the map over everything else
+    if (campusCamera.aspect !== r.width / r.height) {
+      campusCamera.aspect = r.width / r.height
+      campusCamera.updateProjectionMatrix()
+    }
+    gl.render(campusScene, campusCamera)
+    gl.setScissorTest(false)
+    gl.setViewport(0, 0, size.width, size.height)
+  }, 1)
+  return null
+}
+
+/**
+ * Advances the canvas from GSAP's ticker, right after Lenis has moved the page, so the
+ * scissored campus view stays glued to its element while smooth-scrolling.
+ * With reduced motion it only draws when something changed.
+ */
+function FrameDriver({ reduced }: { reduced: boolean }) {
+  const advance = useThree((s) => s.advance)
+  useEffect(() => {
+    let warmup = 20 // let async bits (environment map, fonts, layout) settle
+    markDirty()
+    const offScroll = onScrollChange(markDirty)
+    window.addEventListener('resize', markDirty)
+    const tick = (time: number) => {
+      if (reduced && warmup <= 0 && !consumeDirty()) return
+      warmup--
+      advance(time, true)
+    }
+    gsap.ticker.add(tick)
+    return () => {
+      gsap.ticker.remove(tick)
+      offScroll()
+      window.removeEventListener('resize', markDirty)
+    }
+  }, [advance, reduced])
   return null
 }
 
@@ -113,18 +91,6 @@ function Fallback() {
       <div className="absolute right-[18%] top-[30%] h-64 w-64 rounded-full bg-neon/15 blur-3xl" />
     </div>
   )
-}
-
-function hasWebGL() {
-  if (new URLSearchParams(window.location.search).has('nowebgl')) return false
-  try {
-    const canvas = document.createElement('canvas')
-    const gl = canvas.getContext('webgl2') ?? canvas.getContext('webgl')
-    gl?.getExtension('WEBGL_lose_context')?.loseContext()
-    return !!gl
-  } catch {
-    return false
-  }
 }
 
 class SceneBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
@@ -140,29 +106,50 @@ class SceneBoundary extends Component<{ children: ReactNode }, { failed: boolean
 export default function Scene() {
   const reduced = useReducedMotion()
   const [webgl] = useState(hasWebGL)
+  const [coarse] = useState(isCoarsePointer)
+  const [showStats] = useState(() => new URLSearchParams(window.location.search).has('stats'))
+  // Phones get a lower pixel-ratio ceiling; the performance monitor drops to 1 if frames suffer.
+  const maxDpr = Math.min(window.devicePixelRatio || 1, coarse ? 1.5 : 1.75)
+  const [dpr, setDpr] = useState(maxDpr)
+
   if (!webgl) return <Fallback />
 
   return (
     <SceneBoundary>
       <div className="fixed inset-0 z-0" aria-hidden>
         <Canvas
-          frameloop={reduced ? 'demand' : 'always'}
+          frameloop="never"
+          // Listen on the page root: the canvas sits under the content, so it would never see the pointer.
+          eventSource={document.getElementById('root')!}
+          eventPrefix="client"
           camera={{ position: [0, 0, 6], fov: 50 }}
-          dpr={[1, 1.75]}
+          dpr={dpr}
           gl={{ antialias: true, powerPreference: 'high-performance' }}
         >
+          <FrameDriver reduced={reduced} />
+          {!reduced && (
+            <PerformanceMonitor flipflops={3} onDecline={() => setDpr(1)} onIncline={() => setDpr(maxDpr)} onFallback={() => setDpr(1)} />
+          )}
           <color attach="background" args={['#07070d']} />
           <fog attach="fog" args={['#07070d', 8, 22]} />
-          <ambientLight intensity={0.4} />
+          <ambientLight intensity={0.3} />
           <pointLight position={[5, 5, 5]} intensity={60} color="#7cf7c8" />
           <pointLight position={[-6, -3, 2]} intensity={40} color="#ff5ca8" />
+          {/* Procedural reflections for the metallic core: rendered once, nothing downloaded. */}
+          <Environment resolution={64} frames={1}>
+            <Lightformer form="ring" color="#7cf7c8" intensity={3} position={[3, 2, 4]} scale={3} />
+            <Lightformer form="rect" color="#ff5ca8" intensity={2} position={[-4, -1, 2]} scale={[4, 1, 1]} />
+            <Lightformer form="rect" color="#ffffff" intensity={1.5} position={[0, 5, -3]} scale={[8, 1, 1]} />
+          </Environment>
           <Suspense fallback={null}>
-            <Core reduced={reduced} />
-            <Stars radius={60} depth={40} count={2500} factor={3} fade speed={reduced ? 0 : 0.6} />
-            <Sparkles count={70} scale={[14, 8, 6]} size={2.5} speed={reduced ? 0 : 0.4} color="#7cf7c8" />
+            <Core reduced={reduced} detail={coarse ? 12 : 24} />
+            <Stars radius={60} depth={40} count={coarse ? 1200 : 2500} factor={3} fade speed={reduced ? 0 : 0.6} />
+            <Sparkles count={coarse ? 35 : 70} scale={[14, 8, 6]} size={2.5} speed={reduced ? 0 : 0.4} color="#7cf7c8" />
           </Suspense>
+          <Campus reduced={reduced} />
           <Rig reduced={reduced} />
-          {reduced && <RedrawOnScroll />}
+          <Renderer />
+          {showStats && <Stats />}
         </Canvas>
       </div>
     </SceneBoundary>

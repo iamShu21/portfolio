@@ -3,6 +3,9 @@ import { explorendmu as e, type Shot } from './content'
 import { SectionLabel, TextLink } from './ui'
 import { lockScroll } from './scroll'
 import { useReducedMotion } from './motion'
+import { viewTargets } from './events'
+import { hasWebGL } from './webgl'
+import campus from './three/campus.json'
 
 const MEDIA = `${import.meta.env.BASE_URL}projects/explorendmu/`
 
@@ -69,6 +72,55 @@ function ClipDialog({ shot, onClose }: { shot: Shot | null; onClose: () => void 
         </figure>
       )}
     </dialog>
+  )
+}
+
+const svgPath = (pts: number[][]) => 'M' + pts.map((p) => p.join(' ')).join(' L')
+
+/**
+ * Placeholder for the 3D campus map: the shared canvas draws into this element's rect
+ * (see three/Campus.tsx). Without WebGL it shows the same routes as a flat SVG.
+ */
+function CampusMap() {
+  const ref = useRef<HTMLDivElement>(null)
+  const [webgl] = useState(hasWebGL)
+
+  useEffect(() => {
+    if (!webgl) return
+    viewTargets.campus = ref.current
+    return () => {
+      viewTargets.campus = null
+    }
+  }, [webgl])
+
+  return (
+    <figure className="mt-8">
+      <div
+        ref={ref}
+        role="img"
+        aria-label={`Map of the campus route network: ${campus.walks.length} walked routes as thin lines, with the ${campus.featured.metres} metre walk from ${campus.featured.from} to the ${campus.featured.to} highlighted in gold and arrows moving along it.`}
+        // Small radius on purpose: the WebGL scissor rect underneath is square-cornered.
+        className="relative aspect-square w-full overflow-hidden rounded-md border border-line sm:aspect-[16/10] lg:aspect-[21/9]"
+      >
+        {!webgl && (
+          <svg viewBox={`0 0 ${campus.width} ${campus.height}`} className="absolute inset-0 h-full w-full bg-panel p-6" aria-hidden>
+            {campus.walks.map((w, i) => (
+              <path key={i} d={svgPath(w)} fill="none" stroke="var(--color-neon)" strokeOpacity={0.4} strokeWidth={2} />
+            ))}
+            <path d={svgPath(campus.featured.pts)} fill="none" stroke="var(--color-gold)" strokeWidth={6} strokeLinecap="round" strokeDasharray="14 12" />
+          </svg>
+        )}
+        <div className="pointer-events-none absolute left-4 top-4 flex flex-col gap-1 font-mono text-xs md:left-6 md:top-6">
+          <span className="text-neon">— {campus.walks.length} walked routes</span>
+          <span className="text-gold">
+            — {campus.featured.from} → {campus.featured.to}, {campus.featured.metres} m
+          </span>
+        </div>
+      </div>
+      <figcaption className="mt-3 text-sm text-white/65">
+        The team’s real route network in 3D, from the walks recorded on campus. Gold arrows follow the {campus.featured.metres} m walk from {campus.featured.from} to the {campus.featured.to}, the way they do in the app.
+      </figcaption>
+    </figure>
   )
 }
 
@@ -193,14 +245,15 @@ export default function ExploreNDMU() {
         </ul>
       </div>
 
-      {/* How it works */}
-      <div className="mt-24">
+      {/* How it works (the core steps aside: the campus map is the 3D here) */}
+      <div className="mt-24" data-core="away">
         <h3 data-reveal className="text-2xl font-bold md:text-3xl">
           How it works
         </h3>
         <p data-reveal className="mt-3 max-w-2xl text-white/70">
           The hard work happens before the app is installed. Routes are built once from real walks, and the phone only follows them, so a walk never needs the internet.
         </p>
+        <CampusMap />
         <div className="mt-8 grid gap-4 md:grid-cols-2 md:gap-6">
           {e.how.map((lane) => (
             <section key={lane.title} data-reveal aria-label={lane.title} className="rounded-3xl border border-line bg-panel/90 p-6 md:p-8">

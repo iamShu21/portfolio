@@ -7,6 +7,7 @@ import { useReducedMotion } from './motion'
 import { facts, profile, projects, stack, type Project } from './content'
 import { SectionLabel, TextLink } from './ui'
 import ExploreNDMU from './ExploreNDMU'
+import Transition from './Transition'
 
 const YEAR = new Date().getFullYear()
 
@@ -233,18 +234,19 @@ export default function App() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Tell the 3D core which side to sit on for the section in the middle of the screen.
+      // Tell the 3D core where to sit for the section in the middle of the screen. Blocks can
+      // nest (a block inside a section), so the innermost active one (last in DOM order) wins.
+      const triggers: ScrollTrigger[] = []
+      const pickSpot = () => {
+        const active = triggers.filter((t) => t.isActive).pop()
+        const spot = (active?.trigger as HTMLElement | undefined)?.dataset.core as CoreSpot | undefined
+        if (spot && spot !== scrollState.spot) {
+          scrollState.spot = spot
+          emitScrollChange()
+        }
+      }
       gsap.utils.toArray<HTMLElement>('[data-core]').forEach((el) => {
-        ScrollTrigger.create({
-          trigger: el,
-          start: 'top center',
-          end: 'bottom center',
-          onToggle: (self) => {
-            if (!self.isActive) return
-            scrollState.spot = el.dataset.core as CoreSpot
-            emitScrollChange()
-          },
-        })
+        triggers.push(ScrollTrigger.create({ trigger: el, start: 'top center', end: 'bottom center', onToggle: pickSpot }))
       })
 
       if (reduced) return
@@ -269,6 +271,7 @@ export default function App() {
       <div ref={root} className="grain relative">
         <Scene />
         <Cursor />
+        <Transition />
         <Nav />
         <main className="relative z-10">
           <Hero />

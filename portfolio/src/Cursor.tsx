@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { motion, useMotionValue, useSpring } from 'framer-motion'
+import { CORE_HOVER } from './events'
 
 /** Playful trailing cursor. Hidden on touch devices and with reduced motion (native cursor instead). */
 export default function Cursor() {
@@ -13,14 +14,26 @@ export default function Cursor() {
   const sScale = useSpring(scale, { stiffness: 300, damping: 20 })
 
   useEffect(() => {
+    let overCore = false
+    let overLink = false
+    const update = () => scale.set(overLink ? 2.4 : overCore ? 3.2 : 1)
     const move = (e: PointerEvent) => {
       x.set(e.clientX)
       y.set(e.clientY)
-      const hot = (e.target as HTMLElement | null)?.closest('a, button, [data-hover]')
-      scale.set(hot ? 2.4 : 1)
+      overLink = !!(e.target as HTMLElement | null)?.closest('a, button, [data-hover]')
+      update()
+    }
+    // The 3D core reports hover itself (it lives in the canvas, not the DOM).
+    const core = (e: Event) => {
+      overCore = (e as CustomEvent<boolean>).detail
+      update()
     }
     window.addEventListener('pointermove', move)
-    return () => window.removeEventListener('pointermove', move)
+    window.addEventListener(CORE_HOVER, core)
+    return () => {
+      window.removeEventListener('pointermove', move)
+      window.removeEventListener(CORE_HOVER, core)
+    }
   }, [x, y, scale])
 
   return (
