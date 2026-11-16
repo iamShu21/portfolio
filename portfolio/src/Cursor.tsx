@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { motion, useMotionValue, useSpring } from 'framer-motion'
 
-/** Playful trailing cursor. Hidden on touch devices. */
+/** Playful trailing cursor. Hidden on touch devices and with reduced motion (native cursor instead). */
 export default function Cursor() {
   const x = useMotionValue(-100)
   const y = useMotionValue(-100)
@@ -24,7 +24,7 @@ export default function Cursor() {
   }, [x, y, scale])
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-[70] hidden [@media(hover:hover)_and_(pointer:fine)]:block">
+    <div className="pointer-events-none fixed inset-0 z-[70] hidden [@media(hover:hover)_and_(pointer:fine)_and_(prefers-reduced-motion:no-preference)]:block" aria-hidden>
       <motion.div className="absolute h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-full border border-neon/70" style={{ left: bx, top: by, scale: sScale }} />
       <motion.div className="absolute h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-neon" style={{ left: sx, top: sy }} />
     </div>

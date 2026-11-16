@@ -1,22 +1,29 @@
 import { useEffect, useRef, useState } from 'react'
-import { motion } from 'framer-motion'
+import { MotionConfig, motion, useMotionValue, useSpring } from 'framer-motion'
 import Scene from './Scene'
 import Cursor from './Cursor'
-import { gsap, useSmoothScroll } from './scroll'
+import { emitScrollChange, gsap, scrollState, ScrollTrigger, useSmoothScroll, type CoreSpot } from './scroll'
+import { useReducedMotion } from './motion'
 import { facts, profile, projects, stack, type Project } from './content'
+
+const YEAR = new Date().getFullYear()
 
 /* ---------- small pieces ---------- */
 
+/** Words that slide up one by one. Screen readers get the plain sentence instead. */
 function SplitWords({ text, className = '' }: { text: string; className?: string }) {
   return (
-    <span className={className} aria-label={text}>
-      {text.split(' ').map((w, i) => (
-        <span key={i} className="inline-block overflow-hidden align-bottom" aria-hidden>
-          <span data-word className="inline-block will-change-transform">
-            {w}&nbsp;
+    <span className={className}>
+      <span className="sr-only">{text}</span>
+      <span aria-hidden>
+        {text.split(' ').map((w, i) => (
+          <span key={i} className="inline-block overflow-hidden align-bottom">
+            <span data-word className="inline-block will-change-transform">
+              {w}&nbsp;
+            </span>
           </span>
-        </span>
-      ))}
+        ))}
+      </span>
     </span>
   )
 }
@@ -49,11 +56,11 @@ function Nav() {
 
 function Hero() {
   return (
-    <section id="top" className="relative flex min-h-screen flex-col justify-center px-6 md:px-12">
+    <section id="top" data-core="hero" className="relative flex min-h-svh flex-col justify-end px-6 pb-28 pt-24 md:justify-center md:px-12 md:pb-0">
       <p data-hero className="mb-4 font-mono text-sm text-neon">
-        {'>'} hello, world<span className="animate-pulse">_</span>
+        {'>'} hello, world<span className="motion-safe:animate-pulse">_</span>
       </p>
-      <h1 className="max-w-4xl text-6xl font-bold leading-[0.95] tracking-tight md:text-8xl">
+      <h1 className="max-w-4xl text-5xl font-bold leading-[0.95] tracking-tight sm:text-6xl md:text-8xl">
         <SplitWords text={`I'm ${profile.name}.`} />
         <br />
         <SplitWords text={profile.role + '.'} className="text-white/40" />
@@ -76,7 +83,7 @@ function Hero() {
 
 function About() {
   return (
-    <section id="about" className="px-6 py-32 md:px-12">
+    <section id="about" data-core="left" className="px-6 py-32 md:px-12">
       <div className="max-w-2xl rounded-3xl border border-line bg-panel/70 p-8 backdrop-blur-md md:ml-auto md:p-12">
         <SectionLabel n="01">About</SectionLabel>
         <p data-reveal className="text-2xl leading-snug md:text-3xl">
@@ -97,11 +104,22 @@ function About() {
 
 function ProjectCard({ p, i }: { p: Project; i: number }) {
   const ref = useRef<HTMLDivElement>(null)
-  const [tilt, setTilt] = useState({ x: 0, y: 0 })
+  const reduced = useReducedMotion()
+  // Motion values update the transform directly, without re-rendering React on every mouse move.
+  const rx = useMotionValue(0)
+  const ry = useMotionValue(0)
+  const rotateX = useSpring(rx, { stiffness: 200, damping: 20 })
+  const rotateY = useSpring(ry, { stiffness: 200, damping: 20 })
 
   const onMove = (e: React.PointerEvent) => {
+    if (reduced || e.pointerType !== 'mouse') return
     const r = ref.current!.getBoundingClientRect()
-    setTilt({ x: ((e.clientY - r.top) / r.height - 0.5) * -10, y: ((e.clientX - r.left) / r.width - 0.5) * 10 })
+    rx.set(((e.clientY - r.top) / r.height - 0.5) * -10)
+    ry.set(((e.clientX - r.left) / r.width - 0.5) * 10)
+  }
+  const reset = () => {
+    rx.set(0)
+    ry.set(0)
   }
 
   return (
@@ -110,10 +128,8 @@ function ProjectCard({ p, i }: { p: Project; i: number }) {
       data-reveal
       data-hover
       onPointerMove={onMove}
-      onPointerLeave={() => setTilt({ x: 0, y: 0 })}
-      animate={{ rotateX: tilt.x, rotateY: tilt.y }}
-      transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-      style={{ transformPerspective: 900 }}
+      onPointerLeave={reset}
+      style={{ transformPerspective: 900, rotateX, rotateY }}
       className={`group relative overflow-hidden rounded-3xl border border-line bg-panel/80 p-8 backdrop-blur-md transition-colors hover:border-neon/60 md:p-10 ${
         p.featured ? 'md:col-span-2' : ''
       }`}
@@ -145,7 +161,7 @@ function ProjectCard({ p, i }: { p: Project; i: number }) {
 
 function Work() {
   return (
-    <section id="work" className="px-6 py-32 md:px-12">
+    <section id="work" data-core="center" className="px-6 py-32 md:px-12">
       <SectionLabel n="02">Selected work</SectionLabel>
       <div className="grid gap-6 md:grid-cols-2">
         {projects.map((p, i) => (
@@ -159,7 +175,7 @@ function Work() {
 function Stack() {
   const items = [...stack, ...stack]
   return (
-    <section id="stack" className="py-32">
+    <section id="stack" data-core="right" className="py-32">
       <div className="px-6 md:px-12">
         <SectionLabel n="03">Stack</SectionLabel>
       </div>
@@ -188,7 +204,7 @@ function Contact() {
     }
   }
   return (
-    <section id="contact" className="flex min-h-screen flex-col justify-center px-6 py-32 md:px-12">
+    <section id="contact" data-core="right" className="flex min-h-svh flex-col justify-center px-6 py-32 md:px-12">
       <SectionLabel n="04">Contact</SectionLabel>
       <h2 data-reveal className="max-w-4xl text-5xl font-bold leading-none tracking-tight md:text-8xl">
         Let&apos;s build something <span className="text-neon">weird</span> and good.
@@ -196,6 +212,9 @@ function Contact() {
       <button data-reveal onClick={copy} className="mt-10 w-fit rounded-full border border-neon px-8 py-4 font-mono text-sm text-neon transition hover:bg-neon hover:text-black">
         {copied ? 'copied ✓' : profile.email}
       </button>
+      <p className="sr-only" aria-live="polite">
+        {copied ? 'Email address copied to clipboard' : ''}
+      </p>
       <div data-reveal className="mt-8 flex gap-6 font-mono text-sm">
         <a href={profile.github} target="_blank" rel="noreferrer" className="hover:text-neon">
           GitHub ↗
@@ -205,7 +224,7 @@ function Contact() {
         </a>
       </div>
       <p className="mt-24 font-mono text-xs text-white/30">
-        © {new Date().getFullYear()} {profile.name} · built with React, Three.js, GSAP &amp; Lenis
+        © {YEAR} {profile.name} · built with React, Three.js, GSAP &amp; Lenis
       </p>
     </section>
   )
@@ -215,13 +234,26 @@ function Contact() {
 
 export default function App() {
   useSmoothScroll()
+  const reduced = useReducedMotion()
   const root = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (reduce) return
-
     const ctx = gsap.context(() => {
+      // Tell the 3D core which side to sit on for the section in the middle of the screen.
+      gsap.utils.toArray<HTMLElement>('[data-core]').forEach((el) => {
+        ScrollTrigger.create({
+          trigger: el,
+          start: 'top center',
+          end: 'bottom center',
+          onToggle: (self) => {
+            if (!self.isActive) return
+            scrollState.spot = el.dataset.core as CoreSpot
+            emitScrollChange()
+          },
+        })
+      })
+
+      if (reduced) return
       gsap.from('[data-word]', { yPercent: 110, duration: 1.1, ease: 'power4.out', stagger: 0.08, delay: 0.2 })
       gsap.from('[data-hero]', { y: 24, opacity: 0, duration: 0.9, ease: 'power3.out', stagger: 0.12, delay: 0.6 })
 
@@ -236,20 +268,22 @@ export default function App() {
       })
     }, root)
     return () => ctx.revert()
-  }, [])
+  }, [reduced])
 
   return (
-    <div ref={root} className="grain relative">
-      <Scene />
-      <Cursor />
-      <Nav />
-      <main className="relative z-10">
-        <Hero />
-        <About />
-        <Work />
-        <Stack />
-        <Contact />
-      </main>
-    </div>
+    <MotionConfig reducedMotion="user">
+      <div ref={root} className="grain relative">
+        <Scene />
+        <Cursor />
+        <Nav />
+        <main className="relative z-10">
+          <Hero />
+          <About />
+          <Work />
+          <Stack />
+          <Contact />
+        </main>
+      </div>
+    </MotionConfig>
   )
 }
