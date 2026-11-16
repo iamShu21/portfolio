@@ -5,6 +5,8 @@ import Cursor from './Cursor'
 import { emitScrollChange, gsap, scrollState, ScrollTrigger, useSmoothScroll, type CoreSpot } from './scroll'
 import { useReducedMotion } from './motion'
 import { facts, profile, projects, stack, type Project } from './content'
+import { SectionLabel, TextLink } from './ui'
+import ExploreNDMU from './ExploreNDMU'
 
 const YEAR = new Date().getFullYear()
 
@@ -25,14 +27,6 @@ function SplitWords({ text, className = '' }: { text: string; className?: string
         ))}
       </span>
     </span>
-  )
-}
-
-function SectionLabel({ n, children }: { n: string; children: string }) {
-  return (
-    <p data-reveal className="mb-6 font-mono text-sm tracking-widest text-neon">
-      <span className="text-white/40">{n} /</span> {children.toUpperCase()}
-    </p>
   )
 }
 
@@ -150,9 +144,9 @@ function ProjectCard({ p, i }: { p: Project; i: number }) {
       </ul>
       <div className="mt-8 flex gap-5">
         {p.links.map((l) => (
-          <a key={l.label} href={l.href} target="_blank" rel="noreferrer" className="font-mono text-sm underline decoration-neon underline-offset-4 hover:text-neon">
-            {l.label} ↗
-          </a>
+          <TextLink key={l.label} href={l.href}>
+            {l.label}
+          </TextLink>
         ))}
       </div>
     </motion.div>
@@ -177,7 +171,7 @@ function Stack() {
   return (
     <section id="stack" data-core="right" className="py-32">
       <div className="px-6 md:px-12">
-        <SectionLabel n="03">Stack</SectionLabel>
+        <SectionLabel n="04">Stack</SectionLabel>
       </div>
       <div className="overflow-hidden border-y border-line bg-ink/60 py-6 backdrop-blur-sm" aria-label={stack.join(', ')}>
         <div className="marquee-track" aria-hidden>
@@ -205,7 +199,7 @@ function Contact() {
   }
   return (
     <section id="contact" data-core="right" className="flex min-h-svh flex-col justify-center px-6 py-32 md:px-12">
-      <SectionLabel n="04">Contact</SectionLabel>
+      <SectionLabel n="05">Contact</SectionLabel>
       <h2 data-reveal className="max-w-4xl text-5xl font-bold leading-none tracking-tight md:text-8xl">
         Let&apos;s build something <span className="text-neon">weird</span> and good.
       </h2>
@@ -280,6 +274,7 @@ export default function App() {
           <Hero />
           <About />
           <Work />
+          <ExploreNDMU />
           <Stack />
           <Contact />
         </main>

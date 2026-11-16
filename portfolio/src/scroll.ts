@@ -26,6 +26,15 @@ export function emitScrollChange() {
   listeners.forEach((fn) => fn())
 }
 
+let lenis: Lenis | null = null
+
+/** Freeze page scrolling, e.g. while a modal dialog is open. */
+export function lockScroll(locked: boolean) {
+  if (locked) lenis?.stop()
+  else lenis?.start()
+  document.documentElement.style.overflow = locked ? 'hidden' : ''
+}
+
 /** Height of the fixed header, so anchor jumps don't hide section labels under it. */
 export const HEADER_OFFSET = 80
 
@@ -36,22 +45,24 @@ export const HEADER_OFFSET = 80
  */
 export function useSmoothScroll() {
   useEffect(() => {
-    const lenis = new Lenis({ lerp: 0.09, anchors: { offset: -HEADER_OFFSET } })
+    const instance = new Lenis({ lerp: 0.09, anchors: { offset: -HEADER_OFFSET } })
+    lenis = instance
 
-    lenis.on('scroll', (e: { progress: number; velocity: number }) => {
+    instance.on('scroll', (e: { progress: number; velocity: number }) => {
       scrollState.progress = e.progress
       scrollState.velocity = e.velocity
       ScrollTrigger.update()
       emitScrollChange()
     })
 
-    const tick = (time: number) => lenis.raf(time * 1000)
+    const tick = (time: number) => instance.raf(time * 1000)
     gsap.ticker.add(tick)
     gsap.ticker.lagSmoothing(0)
 
     return () => {
       gsap.ticker.remove(tick)
-      lenis.destroy()
+      instance.destroy()
+      if (lenis === instance) lenis = null
     }
   }, [])
 }

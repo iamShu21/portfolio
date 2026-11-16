@@ -10,18 +10,25 @@ const PALETTE = ['#7cf7c8', '#ff5ca8', '#f5b301', '#7cf7c8'].map((c) => new THRE
 /** Target position and size for each `data-core` spot, in viewport units. */
 function spotTarget(w: number) {
   const wide = w > 7
-  if (scrollState.spot === 'hero') return wide ? { x: w * 0.24, y: 0, s: Math.min(w / 11, 1) } : { x: 0, y: 1.55, s: 0.4 }
-  if (!wide) return { x: 0, y: 0, s: 0.36 } // behind the content on phones/tablets
+  if (scrollState.spot === 'hero') return wide ? { x: w * 0.24, y: 0, s: Math.min(w / 11, 1), o: 1 } : { x: 0, y: 1.55, s: 0.4, o: 1 }
+  // Phones/tablets have no free side, so the core sits behind the text: keep it faint.
+  if (!wide) return { x: 0, y: 0, s: 0.36, o: 0.3 }
   const side = scrollState.spot === 'left' ? -1 : scrollState.spot === 'right' ? 1 : 0
-  return { x: side * w * 0.27, y: 0, s: side ? 0.8 : 0.9 }
+  return { x: side * w * 0.27, y: 0, s: side ? 0.8 : 0.9, o: 1 }
+}
+
+const setOpacity = (mesh: THREE.Mesh | null, o: number) => {
+  if (mesh) (mesh.material as THREE.Material).opacity = o
 }
 
 /** The hero object: a glowing distorted core wrapped in a wireframe shell and a ring. */
 function Core({ reduced }: { reduced: boolean }) {
   const group = useRef<THREE.Group>(null)
+  const body = useRef<THREE.Mesh>(null)
   const shell = useRef<THREE.Mesh>(null)
   const ring = useRef<THREE.Mesh>(null)
   const color = useRef(new THREE.Color())
+  const fade = useRef(1)
 
   useFrame((state, dt) => {
     const g = group.current
@@ -46,6 +53,11 @@ function Core({ reduced }: { reduced: boolean }) {
     }
     g.scale.setScalar(THREE.MathUtils.damp(g.scale.x, s, reduced ? Infinity : 6, dt))
 
+    fade.current = THREE.MathUtils.damp(fade.current, t.o, ease, dt)
+    setOpacity(body.current, fade.current)
+    setOpacity(shell.current, fade.current * 0.55)
+    setOpacity(ring.current, fade.current)
+
     // Blend the accent colour through the page.
     const k = p * (PALETTE.length - 1)
     const i = Math.min(Math.floor(k), PALETTE.length - 2)
@@ -57,9 +69,9 @@ function Core({ reduced }: { reduced: boolean }) {
   return (
     <group ref={group} rotation={[0.35, 0, 0]}>
       <Float speed={reduced ? 0 : 2} rotationIntensity={0.4} floatIntensity={1.2}>
-        <mesh>
+        <mesh ref={body}>
           <icosahedronGeometry args={[1, 24]} />
-          <MeshDistortMaterial color="#1a1a3a" emissive="#2b2bff" emissiveIntensity={0.45} roughness={0.2} metalness={0.8} distort={0.45} speed={reduced ? 0 : 2} />
+          <MeshDistortMaterial transparent color="#1a1a3a" emissive="#2b2bff" emissiveIntensity={0.45} roughness={0.2} metalness={0.8} distort={0.45} speed={reduced ? 0 : 2} />
         </mesh>
         <mesh ref={shell} scale={1.55}>
           <icosahedronGeometry args={[1, 1]} />
@@ -67,7 +79,7 @@ function Core({ reduced }: { reduced: boolean }) {
         </mesh>
         <mesh ref={ring} scale={2.3}>
           <torusGeometry args={[1, 0.008, 8, 128]} />
-          <meshBasicMaterial color="#7cf7c8" />
+          <meshBasicMaterial transparent color="#7cf7c8" />
         </mesh>
       </Float>
     </group>
