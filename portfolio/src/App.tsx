@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { MotionConfig, motion, useMotionValue, useSpring } from 'framer-motion'
-import Scene from './Scene'
+import SceneFallback from './SceneFallback'
+import { hasWebGL } from './webgl'
 import Cursor from './Cursor'
 import { emitScrollChange, gsap, scrollState, ScrollTrigger, useSmoothScroll, type CoreSpot } from './scroll'
 import { useReducedMotion } from './motion'
@@ -11,6 +12,34 @@ import ExploreNDMU from './ExploreNDMU'
 import Transition from './Transition'
 
 const YEAR = new Date().getFullYear()
+
+// Three.js + R3F + drei live in their own chunk, fetched once the page has painted.
+const Scene = lazy(() => import('./Scene'))
+
+/** Static glow first; the 3D scene loads when the browser is idle (never without WebGL). */
+function Background() {
+  const [load, setLoad] = useState(false)
+  useEffect(() => {
+    if (!hasWebGL()) return
+    const start = () => setLoad(true)
+    if ('requestIdleCallback' in window) {
+      const id = requestIdleCallback(start, { timeout: 1500 })
+      return () => cancelIdleCallback(id)
+    }
+    const t = setTimeout(start, 300)
+    return () => clearTimeout(t)
+  }, [])
+  return (
+    <>
+      <SceneFallback />
+      {load && (
+        <Suspense fallback={null}>
+          <Scene />
+        </Suspense>
+      )}
+    </>
+  )
+}
 
 /* ---------- small pieces ---------- */
 
@@ -323,7 +352,7 @@ export default function App() {
   return (
     <MotionConfig reducedMotion="user">
       <div ref={root} className="grain relative">
-        <Scene />
+        <Background />
         <Cursor />
         <Transition />
         <Nav />

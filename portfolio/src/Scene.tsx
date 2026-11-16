@@ -83,23 +83,14 @@ function FrameDriver({ reduced }: { reduced: boolean }) {
   return null
 }
 
-/** Static stand-in when WebGL is unavailable or the scene crashes. */
-function Fallback() {
-  return (
-    <div className="fixed inset-0 z-0 overflow-hidden bg-ink" aria-hidden>
-      <div className="absolute right-[8%] top-[18%] h-[28rem] w-[28rem] rounded-full bg-[#2b2bff]/25 blur-3xl" />
-      <div className="absolute right-[18%] top-[30%] h-64 w-64 rounded-full bg-neon/15 blur-3xl" />
-    </div>
-  )
-}
-
+/** If the scene throws, drop it: <SceneFallback/> underneath (rendered by App) stays visible. */
 class SceneBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
   state = { failed: false }
   static getDerivedStateFromError() {
     return { failed: true }
   }
   render() {
-    return this.state.failed ? <Fallback /> : this.props.children
+    return this.state.failed ? null : this.props.children
   }
 }
 
@@ -111,13 +102,16 @@ export default function Scene() {
   // Phones get a lower pixel-ratio ceiling; the performance monitor drops to 1 if frames suffer.
   const maxDpr = Math.min(window.devicePixelRatio || 1, coarse ? 1.5 : 1.75)
   const [dpr, setDpr] = useState(maxDpr)
+  const [ready, setReady] = useState(false)
 
-  if (!webgl) return <Fallback />
+  if (!webgl) return null
 
   return (
     <SceneBoundary>
-      <div className="fixed inset-0 z-0" aria-hidden>
+      {/* Fades in over the static fallback once the first frame is drawn. */}
+      <div className={`fixed inset-0 z-0 motion-safe:transition-opacity motion-safe:duration-700 ${ready ? 'opacity-100' : 'opacity-0'}`} aria-hidden>
         <Canvas
+          onCreated={() => requestAnimationFrame(() => requestAnimationFrame(() => setReady(true)))}
           frameloop="never"
           // Listen on the page root: the canvas sits under the content, so it would never see the pointer.
           eventSource={document.getElementById('root')!}
