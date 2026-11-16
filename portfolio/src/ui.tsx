@@ -1,3 +1,5 @@
+import { cn } from './lib/utils'
+
 /** Small presentational pieces shared by the page sections. */
 
 export function SectionLabel({ n, children }: { n: string; children: string }) {
@@ -15,7 +17,7 @@ export function TextLink({ href, children, className = '' }: { href: string; chi
     <a
       href={href}
       {...(external ? { target: '_blank', rel: 'noreferrer' } : {})}
-      className={`font-mono text-sm underline decoration-neon underline-offset-4 hover:text-neon ${className}`}
+      className={cn('font-mono text-sm underline decoration-neon underline-offset-4 hover:text-neon', className)}
     >
       {children}
       {external && (

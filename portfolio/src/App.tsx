@@ -4,7 +4,8 @@ import Scene from './Scene'
 import Cursor from './Cursor'
 import { emitScrollChange, gsap, scrollState, ScrollTrigger, useSmoothScroll, type CoreSpot } from './scroll'
 import { useReducedMotion } from './motion'
-import { facts, profile, projects, stack, type Project } from './content'
+import { explorendmu, facts, profile, projects, skills, stack, type Project } from './content'
+import { BentoCard, BentoGrid, Chips } from './components/Bento'
 import { SectionLabel, TextLink } from './ui'
 import ExploreNDMU from './ExploreNDMU'
 import Transition from './Transition'
@@ -167,10 +168,62 @@ function Work() {
   )
 }
 
+function Skills() {
+  const s = skills
+  return (
+    // Two bento rows, then the "learning" strip sized to its content.
+    <BentoGrid className="mt-12 px-6 md:grid-rows-[repeat(2,minmax(14rem,auto))_auto] md:px-12">
+      <BentoCard kicker="01" title={s.frontend.title} className="md:col-span-2">
+        <p className="max-w-md text-white/70">{s.frontend.blurb}</p>
+        <div className="mt-5 flex flex-1 flex-col justify-end gap-5 md:flex-row md:items-end md:justify-between">
+          <Chips items={s.frontend.items} />
+          <pre aria-hidden className="hidden rounded-2xl border border-line bg-ink/70 p-4 font-mono text-xs leading-relaxed text-neon/90 lg:block">
+            {s.frontend.snippet.join('\n')}
+          </pre>
+        </div>
+      </BentoCard>
+      <BentoCard kicker="02" title={s.xr.title} accent="gold" className="md:row-span-2">
+        <p className="text-white/70">{s.xr.blurb}</p>
+        <div className="mt-5">
+          <Chips items={s.xr.items} />
+        </div>
+        <dl className="mt-auto grid grid-cols-2 gap-4 pt-8">
+          {[explorendmu.stats[0], explorendmu.stats[3]].map((st) => (
+            <div key={st.k} className="flex flex-col-reverse">
+              <dt className="text-sm text-white/70">{st.k}</dt>
+              <dd className="font-mono text-4xl font-bold text-gold">{st.n}</dd>
+            </div>
+          ))}
+        </dl>
+        <div className="pt-6">
+          <TextLink href={s.xr.link.href} className="decoration-gold hover:text-gold">
+            {s.xr.link.label}
+          </TextLink>
+        </div>
+      </BentoCard>
+      <BentoCard kicker="03" title={s.backend.title} accent="pink">
+        <p className="text-white/70">{s.backend.blurb}</p>
+        <div className="mt-auto pt-5">
+          <Chips items={s.backend.items} />
+        </div>
+      </BentoCard>
+      <BentoCard kicker="04" title={s.shipping.title}>
+        <p className="text-white/70">{s.shipping.blurb}</p>
+        <div className="mt-auto pt-5">
+          <Chips items={s.shipping.items} />
+        </div>
+      </BentoCard>
+      <BentoCard kicker="now" title={s.learning.title} accent="pink" className="md:col-span-3">
+        <p className="text-white/70">{s.learning.blurb}</p>
+      </BentoCard>
+    </BentoGrid>
+  )
+}
+
 function Stack() {
   const items = [...stack, ...stack]
   return (
-    <section id="stack" data-core="right" className="py-32">
+    <section id="stack" data-core="away" className="py-32">
       <div className="px-6 md:px-12">
         <SectionLabel n="04">Stack</SectionLabel>
       </div>
@@ -183,6 +236,7 @@ function Stack() {
           ))}
         </div>
       </div>
+      <Skills />
     </section>
   )
 }

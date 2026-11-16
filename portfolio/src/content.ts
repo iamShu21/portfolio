@@ -138,6 +138,36 @@ export const stack = [
   'Python',
 ]
 
+/** Skills bento (Stack section). Edit freely: every group only uses skills from `stack` above. */
+export const skills = {
+  frontend: {
+    title: 'Frontend',
+    blurb: 'Interfaces that feel fast and a little playful. This site: React, R3F, GSAP and Lenis.',
+    items: ['React', 'TypeScript', 'Tailwind', 'Three.js'],
+    snippet: ['<Canvas eventSource={root}>', '  <Core onPointerOver={charge} />', '  <Campus routes={walks} />', '</Canvas>'],
+  },
+  xr: {
+    title: '3D & AR',
+    blurb: 'Unity and AR Foundation on Android: GPS-surveyed routes, AR arrows and marker-tracked models.',
+    items: ['Unity', 'C#', 'AR Foundation', 'ARCore', 'Three.js'],
+    link: { label: 'See ExploreNDMU ↓', href: '#explorendmu' },
+  },
+  backend: {
+    title: 'Backend',
+    blurb: 'APIs and data behind the pixels.',
+    items: ['Node.js', 'REST', 'PostgreSQL', 'Python'],
+  },
+  shipping: {
+    title: 'Shipping',
+    blurb: 'Version control and reproducible builds.',
+    items: ['Git', 'Docker'],
+  },
+  learning: {
+    title: 'Currently learning',
+    blurb: 'React Three Fiber: shaders, scissor views and keeping 3D at 60 fps on phones.',
+  },
+}
+
 export const facts = [
   { k: 'Focus', v: 'Full-stack web + 3D/AR' },
   { k: 'Status', v: 'Student, open to internships' },
