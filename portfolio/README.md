@@ -1,32 +1,94 @@
-# React + TypeScript + Vite
+# Shuhari Alaihim Amoran: portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A portfolio site with a 3D background, a 3D map of the ExploreNDMU campus routes, and a case study of the app.
 
-Currently, two official plugins are available:
+Built with Vite, React, TypeScript, Tailwind CSS v4, React Three Fiber and drei, GSAP ScrollTrigger, Lenis and Framer Motion.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Run it
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm install
+npm run dev        # http://localhost:5173
+npm run build      # type-check + production build into dist/
+npm run preview    # serve dist/ locally
+npm run lint
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+Useful URL flags: `?stats` shows an FPS meter, and `?nowebgl` shows the no-WebGL fallbacks.
+
+## Editing content
+
+All text lives in `src/content.ts`, including the profile, projects, skills and the ExploreNDMU case study.
+The case-study images and clips are in `public/projects/explorendmu/`. The campus route data is in `src/three/campus.json`.
+
+## How it's put together
+
+- `src/App.tsx`: page sections; loads the 3D scene lazily after first paint
+- `src/Scene.tsx`: the one WebGL canvas. It's driven from GSAP's ticker right after Lenis scrolls, and it draws the campus map into its page element with a scissor pass
+- `src/three/`: the hero core (hover/click reactive) and the campus map
+- `src/Transition.tsx`: the wipe animation on long in-page jumps
+- `src/ExploreNDMU.tsx`: the case study (gallery with clip dialog, features, how it works)
+
+With `prefers-reduced-motion`, the canvas draws only when something changes, nothing loops, and in-page jumps are instant.
+
+## Deploy
+
+### Vercel (recommended)
+
+1. Push this repository to GitHub.
+2. On vercel.com, choose **Add New → Project**, import the repo, and set **Root Directory** to `portfolio`.
+   Vercel detects Vite, so the build command (`npm run build`) and output folder (`dist`) are filled in for you.
+3. Deploy. Every push to `main` redeploys, and other branches get preview URLs.
+
+### GitHub Pages
+
+The site needs to know the path it's served from:
+
+| Repo name | URL | Build with |
+| --- | --- | --- |
+| `<user>.github.io` | `https://<user>.github.io/` | nothing extra |
+| anything else, e.g. `portfolio` | `https://<user>.github.io/portfolio/` | `BASE_PATH=/portfolio/` |
+
+Add `.github/workflows/deploy.yml` at the **repository root** (one level above this folder):
+
+```yaml
+name: Deploy to GitHub Pages
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    defaults:
+      run:
+        working-directory: portfolio
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: portfolio/package-lock.json
+      - run: npm ci
+      - run: npm run build
+        env:
+          BASE_PATH: / # use /<repo>/ for a project site
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: portfolio/dist
+      - id: deployment
+        uses: actions/deploy-pages@v4
+```
+
+Then in the repo go to **Settings → Pages → Source** and choose **GitHub Actions**.
