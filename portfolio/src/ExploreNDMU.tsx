@@ -191,7 +191,9 @@ function Gallery() {
 export default function ExploreNDMU() {
   return (
     <section id="explorendmu" data-core="right" aria-labelledby="explorendmu-title" className="px-6 py-32 md:px-12">
-      <SectionLabel n="03">Case study</SectionLabel>
+      <SectionLabel n="03" as="p">
+        Case study
+      </SectionLabel>
 
       {/* Intro */}
       <div className="grid gap-10 lg:grid-cols-[1.4fr_1fr] lg:items-end">

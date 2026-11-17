@@ -34,9 +34,11 @@ export default function Transition() {
         focusSection(target)
         history.replaceState(null, '', `#${id}`)
       }
+      // data-instant (e.g. the skip link): jump straight there, no animation.
+      const instant = reduced || a?.hasAttribute('data-instant')
       const far = Math.abs(target.getBoundingClientRect().top) > window.innerHeight * 1.5
-      if (reduced || !far || !panel.current) {
-        scrollToElement(target, { immediate: reduced })
+      if (instant || !far || !panel.current) {
+        scrollToElement(target, { immediate: instant })
         land()
         return
       }

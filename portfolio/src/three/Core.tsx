@@ -9,12 +9,21 @@ import { markDirty } from './frame'
 const PALETTE = ['#7cf7c8', '#ff5ca8', '#f5b301', '#7cf7c8'].map((c) => new THREE.Color(c))
 const { damp } = THREE.MathUtils
 
-/** Target position, size and opacity for the current `data-core` spot, in viewport units. */
-function spotTarget(w: number) {
+/**
+ * Target position, size and opacity for the current `data-core` spot, in viewport units.
+ * `w` is the viewport width in world units, `px` its height in CSS pixels.
+ */
+function spotTarget(w: number, px: number) {
   const wide = w > 7
   // Step aside (fade out) where another 3D visual is the focus, e.g. the campus map.
   if (scrollState.spot === 'away') return { x: wide ? w * 0.3 : 0, y: -0.5, s: 0.5, o: 0 }
-  if (scrollState.spot === 'hero') return wide ? { x: w * 0.24, y: 0, s: Math.min(w / 11, 1), o: 1 } : { x: 0, y: 1.55, s: 0.4, o: 1 }
+  if (scrollState.spot === 'hero') {
+    if (wide) return { x: w * 0.24, y: 0, s: Math.min(w / 11, 1), o: 1 }
+    // Portrait: the core sits above the text. Short screens have less room up there,
+    // so shrink it and lift it toward the header.
+    const room = THREE.MathUtils.clamp((px - 560) / 280, 0.7, 1)
+    return { x: 0, y: 1.55 + (1 - room) * 0.6, s: 0.4 * room, o: 1 }
+  }
   // Phones/tablets have no free side, so the core sits behind the text: keep it faint.
   if (!wide) return { x: 0, y: 0, s: 0.36, o: 0.3 }
   const side = scrollState.spot === 'left' ? -1 : scrollState.spot === 'right' ? 1 : 0
@@ -72,7 +81,7 @@ export default function Core({ reduced, detail }: { reduced: boolean; detail: nu
     if (!g) return
     const dt = Math.min(rawDt, 0.1)
     const p = scrollState.progress
-    const t = spotTarget(state.viewport.width)
+    const t = spotTarget(state.viewport.width, state.size.height)
     // With reduced motion frames only render on change, so snap instead of easing.
     const ease = reduced ? Infinity : 3
 

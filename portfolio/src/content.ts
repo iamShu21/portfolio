@@ -1,7 +1,7 @@
 // Edit this file to make the portfolio yours. Everything on the page comes from here.
 
 export const profile = {
-  name: 'Your Name',
+  name: 'Shuhari Alaihim Amoran',
   role: 'Full-Stack Developer',
   tagline: 'I build things that work on screens, in 3D, and in the real world.',
   bio: 'A student developer who likes taking an idea from database to pixels. I built an AR campus navigation app for my university and I am always looking for the next thing to break and rebuild better.',
@@ -68,7 +68,6 @@ export type Shot = {
 
 export const explorendmu = {
   lead: 'An Android AR app that walks you across the Notre Dame of Marbel University campus. Gold arrows lie on the real walkway, a voice calls every turn, and each place has a card with its schedule and services.',
-  // TODO(owner): confirm this matches what you did on the team.
   role: 'Full-stack developer in a team of three',
   team: 'Capstone, BS Information Technology, 2026. With Ben Raffy Herradura (research, field mapping, 3D modelling) and Edward Villanueva (research, field mapping).',
   links: [

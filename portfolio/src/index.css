@@ -32,6 +32,12 @@ body {
   color: #000;
 }
 
+/* Film grain: a full-screen layer composited over the 3D every frame, so mouse/desktop only. */
+@media (pointer: coarse) {
+  .grain::after {
+    display: none;
+  }
+}
 .grain::after {
   content: '';
   position: fixed;
@@ -64,8 +70,15 @@ section[id] {
   scroll-margin-top: 80px;
 }
 /* Sections receive focus after an in-page jump (for keyboard users); no ring needed there. */
-section[tabindex='-1']:focus {
+section[tabindex='-1']:focus,
+main[tabindex='-1']:focus {
   outline: none;
+}
+
+/* A visible keyboard focus ring everywhere (the custom cursor gives no focus cue). */
+:focus-visible {
+  outline: 2px solid var(--color-neon);
+  outline-offset: 3px;
 }
 
 /* Modal dialogs sit in the top layer, above the custom cursor, so give them the native one. */
