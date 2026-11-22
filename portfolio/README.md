@@ -40,6 +40,12 @@ With `prefers-reduced-motion`, the canvas draws only when something changes, not
    Vercel detects Vite, so the build command (`npm run build`) and output folder (`dist`) are filled in for you.
 3. Deploy. Every push to `main` redeploys, and other branches get preview URLs.
 
+### Link previews
+
+`public/og.jpg` (1200×630) is the image shown when the link is shared. Link previews need its full URL, and a build plugin in `vite.config.ts` adds the tags.
+On Vercel this works automatically through the project's production domain. Anywhere else, build with `SITE_URL` set to the site's public address, for example `SITE_URL=https://iamshu21.github.io/portfolio`.
+If you change the hero, retake the screenshot at 1200×630.
+
 ### GitHub Pages
 
 The site needs to know the path it's served from:
@@ -84,6 +90,7 @@ jobs:
       - run: npm run build
         env:
           BASE_PATH: / # use /<repo>/ for a project site
+          SITE_URL: https://<user>.github.io # add /<repo> for a project site
       - uses: actions/upload-pages-artifact@v3
         with:
           path: portfolio/dist
