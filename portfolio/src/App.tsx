@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
-import { MotionConfig, motion, useMotionValue, useSpring } from 'framer-motion'
+import { LazyMotion, MotionConfig, m, useMotionValue, useSpring } from 'framer-motion'
 import SceneFallback from './SceneFallback'
 import { hasWebGL } from './webgl'
 import Cursor from './Cursor'
@@ -12,6 +12,8 @@ import ExploreNDMU from './ExploreNDMU'
 import Transition from './Transition'
 
 const YEAR = new Date().getFullYear()
+
+const loadMotionFeatures = () => import('./motionFeatures').then((mod) => mod.default)
 
 // Three.js + R3F + drei live in their own chunk, fetched once the page has painted.
 const Scene = lazy(() => import('./Scene'))
@@ -171,7 +173,7 @@ function ProjectCard({ p, i }: { p: Project; i: number }) {
   }
 
   return (
-    <motion.div
+    <m.div
       ref={ref}
       data-reveal
       data-hover
@@ -205,7 +207,7 @@ function ProjectCard({ p, i }: { p: Project; i: number }) {
           </TextLink>
         ))}
       </div>
-    </motion.div>
+    </m.div>
   )
 }
 
@@ -399,6 +401,9 @@ export default function App() {
   }, [reduced])
 
   return (
+    // `m` components + lazily loaded features keep Framer Motion's animation engine out of the
+    // main bundle; `strict` makes an accidental `motion.*` component an error.
+    <LazyMotion features={loadMotionFeatures} strict>
     <MotionConfig reducedMotion="user">
       <div ref={root} className="grain relative">
         <Background />
@@ -415,5 +420,6 @@ export default function App() {
         </main>
       </div>
     </MotionConfig>
+    </LazyMotion>
   )
 }
