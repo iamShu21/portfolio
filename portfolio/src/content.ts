@@ -7,9 +7,9 @@ export const profile = {
   bio: 'A student developer who likes taking an idea from database to pixels. I built an AR campus navigation app for my university and I am always looking for the next thing to break and rebuild better.',
   location: 'Koronadal City, Philippines',
   // Leave email or linkedin empty ('') to hide them on the page.
-  email: '',
+  email: 'shuharidalandas@gmail.com',
   github: 'https://github.com/iamShu21',
-  linkedin: '',
+  linkedin: 'https://www.linkedin.com/in/shuhari-alaihim-amoran-792918414/',
 }
 
 export type Project = {
