@@ -138,44 +138,53 @@ export const explorendmu = {
   ],
 }
 
+/** The scrolling marquee in the Stack section. */
 export const stack = [
   'React',
   'TypeScript',
+  'Next.js',
   'Node.js',
+  'Laravel',
+  'Java',
+  'C#',
+  'C++',
+  'Unity',
+  'Flutter',
+  'MySQL',
   'PostgreSQL',
   'Three.js',
-  'Unity',
-  'C#',
+  'Blender',
+  'Astro',
   'Tailwind',
   'Git',
   'Docker',
-  'REST',
   'Python',
+  'QGIS',
 ]
 
-/** Skills bento (Stack section). Edit freely: every group only uses skills from `stack` above. */
+/** Skills bento (Stack section). Edit freely. */
 export const skills = {
   frontend: {
     title: 'Frontend',
     blurb: 'Interfaces that feel fast and a little playful. This site: React, R3F, GSAP and Lenis.',
-    items: ['React', 'TypeScript', 'Tailwind', 'Three.js'],
+    items: ['JavaScript', 'TypeScript', 'React', 'Next.js', 'Astro', 'HTML5', 'CSS3', 'Tailwind', 'Three.js'],
     snippet: ['<Canvas eventSource={root}>', '  <Core onPointerOver={charge} />', '  <Campus routes={walks} />', '</Canvas>'],
   },
   xr: {
-    title: '3D & AR',
-    blurb: 'Unity and AR Foundation on Android: GPS-surveyed routes, AR arrows and marker-tracked models.',
-    items: ['Unity', 'C#', 'AR Foundation', 'ARCore', 'Three.js'],
+    title: '3D, AR & mobile',
+    blurb: 'Unity and AR Foundation on Android: GPS-surveyed routes, AR arrows and marker-tracked models. Mapping in QGIS, models in Blender.',
+    items: ['Unity', 'C#', 'AR Foundation', 'ARCore', 'Android', 'Flutter', 'Blender', 'QGIS'],
     link: { label: 'See ExploreNDMU ↓', href: '#explorendmu' },
   },
   backend: {
-    title: 'Backend',
-    blurb: 'APIs and data behind the pixels.',
-    items: ['Node.js', 'REST', 'PostgreSQL', 'Python'],
+    title: 'Backend & data',
+    blurb: 'APIs and the databases behind the pixels.',
+    items: ['Node.js', 'Express.js', 'Laravel', 'Java', 'C++', 'Python', 'REST', 'MySQL', 'PostgreSQL', 'SQLite', 'Oracle'],
   },
   shipping: {
     title: 'Shipping',
-    blurb: 'Version control and reproducible builds.',
-    items: ['Git', 'Docker'],
+    blurb: 'Version control, reproducible builds and deploys.',
+    items: ['Git', 'GitHub', 'GitHub Pages', 'Vercel', 'Docker'],
   },
   learning: {
     title: 'Currently learning',
