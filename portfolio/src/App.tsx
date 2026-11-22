@@ -214,9 +214,11 @@ function Work() {
     <section id="work" data-core="center" className="px-6 py-32 md:px-12">
       <SectionLabel n="02">Selected work</SectionLabel>
       <div className="grid gap-6 md:grid-cols-2">
-        {projects.map((p, i) => (
-          <ProjectCard key={p.title} p={p} i={i} />
-        ))}
+        {projects
+          .filter((p) => !p.draft)
+          .map((p, i) => (
+            <ProjectCard key={p.title} p={p} i={i} />
+          ))}
       </div>
     </section>
   )
@@ -315,19 +317,38 @@ function Contact() {
       <h2 data-reveal className="max-w-4xl text-5xl font-bold leading-none tracking-tight md:text-8xl">
         Let&apos;s build something <span className="text-neon">weird</span> and good.
       </h2>
-      <button data-reveal onClick={copy} className="mt-10 w-fit rounded-full border border-neon px-8 py-4 font-mono text-sm text-neon transition hover:bg-neon hover:text-black">
-        {copied ? 'copied ✓' : profile.email}
-      </button>
-      <p className="sr-only" aria-live="polite">
-        {copied ? 'Email address copied to clipboard' : ''}
-      </p>
+      {profile.email ? (
+        <>
+          <button data-reveal onClick={copy} className="mt-10 w-fit rounded-full border border-neon px-8 py-4 font-mono text-sm text-neon transition hover:bg-neon hover:text-black">
+            {copied ? 'copied ✓' : profile.email}
+          </button>
+          <p className="sr-only" aria-live="polite">
+            {copied ? 'Email address copied to clipboard' : ''}
+          </p>
+        </>
+      ) : (
+        // No email set yet: GitHub becomes the main call to action.
+        <a
+          data-reveal
+          href={profile.github}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-10 w-fit rounded-full border border-neon px-8 py-4 font-mono text-sm text-neon transition hover:bg-neon hover:text-black"
+        >
+          Find me on GitHub ↗<span className="sr-only"> (opens in a new tab)</span>
+        </a>
+      )}
       <div data-reveal className="mt-8 flex gap-6">
-        <TextLink href={profile.github} className="no-underline">
-          GitHub
-        </TextLink>
-        <TextLink href={profile.linkedin} className="no-underline">
-          LinkedIn
-        </TextLink>
+        {profile.email && profile.github && (
+          <TextLink href={profile.github} className="no-underline">
+            GitHub
+          </TextLink>
+        )}
+        {profile.linkedin && (
+          <TextLink href={profile.linkedin} className="no-underline">
+            LinkedIn
+          </TextLink>
+        )}
       </div>
       <p className="mt-24 font-mono text-xs text-white/60">
         © {YEAR} {profile.name} · built with React, Three.js, GSAP &amp; Lenis

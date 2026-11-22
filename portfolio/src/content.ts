@@ -6,9 +6,10 @@ export const profile = {
   tagline: 'I build things that work on screens, in 3D, and in the real world.',
   bio: 'A student developer who likes taking an idea from database to pixels. I built an AR campus navigation app for my university and I am always looking for the next thing to break and rebuild better.',
   location: 'Koronadal City, Philippines',
-  email: 'you@example.com',
-  github: 'https://github.com/your-username',
-  linkedin: 'https://linkedin.com/in/your-username',
+  // Leave email or linkedin empty ('') to hide them on the page.
+  email: '',
+  github: 'https://github.com/iamShu21',
+  linkedin: '',
 }
 
 export type Project = {
@@ -17,6 +18,8 @@ export type Project = {
   blurb: string
   tags: string[]
   featured?: boolean
+  /** Drafts stay in this file but aren't shown. Remove `draft` to publish a card. */
+  draft?: boolean
   links: { label: string; href: string }[]
 }
 
@@ -35,6 +38,7 @@ export const projects: Project[] = [
   },
   {
     title: 'Project Two',
+    draft: true,
     kind: 'Web · Full-stack',
     blurb: 'Replace this with a web project: what it does, who it is for, and the one hard problem you solved.',
     tags: ['React', 'Node.js', 'PostgreSQL'],
@@ -45,6 +49,7 @@ export const projects: Project[] = [
   },
   {
     title: 'Project Three',
+    draft: true,
     kind: 'API · Backend',
     blurb: 'Another project. Keep it to two sentences and link to the live demo.',
     tags: ['TypeScript', 'Express', 'Docker'],
