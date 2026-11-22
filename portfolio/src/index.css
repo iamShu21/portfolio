@@ -85,6 +85,7 @@ main[tabindex='-1']:focus {
 dialog {
   cursor: auto;
 }
+dialog a,
 dialog button,
 dialog video {
   cursor: pointer;

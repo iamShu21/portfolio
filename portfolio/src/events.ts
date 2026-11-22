@@ -6,5 +6,8 @@ export const CORE_HOVER = 'core:hover'
 /** Event: give the 3D core a spin (fired by page transitions). */
 export const CORE_KICK = 'core:kick'
 
+/** Event: open the CV dialog. */
+export const OPEN_CV = 'cv:open'
+
 /** DOM elements the 3D canvas draws extra scenes into (scissored to their on-screen rect). */
 export const viewTargets: { campus: HTMLElement | null } = { campus: null }

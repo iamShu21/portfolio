@@ -20,6 +20,8 @@ Useful URL flags: `?stats` shows an FPS meter, and `?nowebgl` shows the no-WebGL
 
 All text lives in `src/content.ts`, including the profile, projects, skills and the ExploreNDMU case study.
 The case-study images and clips are in `public/projects/explorendmu/`. The campus route data is in `src/three/campus.json`.
+The CV (an image for the dialog and a PDF to download) is in `public/cv/`, and `profile.cv` in `content.ts` points to it.
+The published copy leaves out the phone number, birth date and home address. Keep it that way when you swap in a new CV.
 
 ## How it's put together
 

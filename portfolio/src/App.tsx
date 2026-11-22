@@ -10,6 +10,7 @@ import { BentoCard, BentoGrid, Chips } from './components/Bento'
 import { SectionLabel, TextLink } from './ui'
 import ExploreNDMU from './ExploreNDMU'
 import Transition from './Transition'
+import { CvDialog, CvLink } from './Cv'
 
 const YEAR = new Date().getFullYear()
 
@@ -88,6 +89,11 @@ function Nav() {
                 </a>
               </li>
             ))}
+            {profile.cv && (
+              <li>
+                <CvLink className="inline-block px-2 py-2.5 text-neon transition hover:text-white">cv</CvLink>
+              </li>
+            )}
           </ul>
         </nav>
       </div>
@@ -147,6 +153,13 @@ function About() {
             </div>
           ))}
         </dl>
+        {profile.cv && (
+          <p data-reveal className="mt-10">
+            <CvLink className="inline-block rounded-full border border-neon px-6 py-3 font-mono text-sm text-neon transition hover:bg-neon hover:text-black">
+              View my CV →
+            </CvLink>
+          </p>
+        )}
       </div>
     </section>
   )
@@ -340,7 +353,7 @@ function Contact() {
           Find me on GitHub ↗<span className="sr-only"> (opens in a new tab)</span>
         </a>
       )}
-      <div data-reveal className="mt-8 flex gap-6">
+      <div data-reveal className="mt-8 flex flex-wrap gap-x-6 gap-y-2">
         {profile.email && profile.github && (
           <TextLink href={profile.github} className="no-underline">
             GitHub
@@ -351,6 +364,12 @@ function Contact() {
             LinkedIn
           </TextLink>
         )}
+        {profile.facebook && (
+          <TextLink href={profile.facebook} className="no-underline">
+            Facebook
+          </TextLink>
+        )}
+        <CvLink className="inline-block py-1 font-mono text-sm hover:text-neon">View CV</CvLink>
       </div>
       <p className="mt-24 font-mono text-xs text-white/60">
         © {YEAR} {profile.name} · built with React, Three.js, GSAP &amp; Lenis
@@ -418,6 +437,7 @@ export default function App() {
           <Stack />
           <Contact />
         </main>
+        <CvDialog />
       </div>
     </MotionConfig>
     </LazyMotion>

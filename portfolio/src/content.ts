@@ -6,10 +6,21 @@ export const profile = {
   tagline: 'I build things that work on screens, in 3D, and in the real world.',
   bio: 'A student developer who likes taking an idea from database to pixels. I built an AR campus navigation app for my university and I am always looking for the next thing to break and rebuild better.',
   location: 'Koronadal City, Philippines',
-  // Leave email or linkedin empty ('') to hide them on the page.
+  // Leave email, linkedin or facebook empty ('') to hide them on the page.
   email: 'shuharidalandas@gmail.com',
   github: 'https://github.com/iamShu21',
   linkedin: 'https://www.linkedin.com/in/shuhari-alaihim-amoran-792918414/',
+  facebook: 'https://www.facebook.com/shuhari.dalandas.9',
+  /**
+   * CV shown in a dialog, with a PDF to download. Files live in public/cv/. This copy leaves out
+   * the phone number, birth date and home address. Set `cv: null` to hide the CV buttons.
+   */
+  cv: { image: 'cv/shuhari-amoran-cv.webp', pdf: 'cv/Shuhari-Amoran-CV.pdf', w: 1415, h: 1820 } as {
+    image: string
+    pdf: string
+    w: number
+    h: number
+  } | null,
 }
 
 export type Project = {
