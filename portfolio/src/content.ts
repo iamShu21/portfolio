@@ -8,8 +8,8 @@ export const profile = {
   location: 'Koronadal City, Philippines',
   /** Short availability line shown in the hero with a green dot. Empty hides it. */
   status: 'Open to internships',
-  /** A square photo in public/, e.g. 'me.webp'. Empty shows initials instead. */
-  photo: '',
+  /** A square photo in public/ (me.webp is cropped from the CV). Empty shows initials instead. */
+  photo: 'me.webp',
   /** Three proof points under the hero. */
   stats: [
     { n: '1', k: 'AR app shipped' },
