@@ -269,6 +269,6 @@ export const answers = [
   {
     q: 'How was this site built?',
     keywords: 'portfolio react tailwind vite source',
-    a: 'React 19, Tailwind CSS 4 and Vite, with no UI kit and no animation library: native <dialog>, CSS scroll-driven animations and SVG.',
+    a: 'React 19, Tailwind CSS 4 and Vite, with no UI kit and no animation library: native <dialog>, CSS scroll-driven animations and SVG. Press X (or pick x-ray here) to see how each part is built and what the page cost your browser.',
   },
 ]

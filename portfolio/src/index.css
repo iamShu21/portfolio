@@ -153,3 +153,45 @@
     animation: none;
   }
 }
+
+/* X-ray build mode (src/xray.ts): every [data-xray] element gets a dashed outline and its note
+   as a chip just above it. */
+html[data-xray-on] [data-xray] {
+  outline: 1px dashed var(--accent);
+  outline-offset: 4px;
+}
+html[data-xray-on] [data-xray]:not(header, dialog) {
+  position: relative;
+}
+html[data-xray-on] [data-xray]::before {
+  content: attr(data-xray);
+  position: absolute;
+  z-index: 30;
+  top: -6px;
+  right: 0;
+  translate: 0 -100%;
+  max-width: min(24rem, 92%);
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: var(--accent-fill);
+  color: #0b0b10;
+  font: 500 10.5px/1.45 var(--font-mono);
+  pointer-events: none;
+}
+/* Where "just above" is hidden or clipped, the chip goes inside or below instead. */
+html[data-xray-on] header[data-xray]::before {
+  top: 100%;
+  right: auto;
+  left: 16px;
+  translate: 0 6px;
+}
+html[data-xray-on] #top[data-xray]::before,
+html[data-xray-on] dialog[data-xray]::before {
+  top: 8px;
+  right: 8px;
+  translate: none;
+}
+html[data-xray-on] dialog[data-xray]::before {
+  top: auto;
+  bottom: 8px;
+}

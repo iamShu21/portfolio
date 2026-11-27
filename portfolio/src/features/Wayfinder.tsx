@@ -3,6 +3,7 @@ import { answers, profile } from '../content'
 import { OPEN_CV, OPEN_WAYFINDER } from '../events'
 import { lockScroll } from '../scroll'
 import { getTheme, toggleTheme } from '../theme'
+import { isXray, toggleXray } from '../xray'
 import { prefersReducedMotion } from '../motion'
 import { cn, isMac } from '../lib/utils'
 
@@ -62,6 +63,13 @@ function buildItems(): Item[] {
     label: `switch to ${getTheme() === 'dark' ? 'light' : 'dark'} theme`,
     keywords: 'theme dark light mode colour color',
     run: () => toggleTheme(),
+  })
+  items.push({
+    kind: 'do',
+    id: 'do-xray',
+    label: `${isXray() ? 'turn off' : 'turn on'} x-ray build mode`,
+    keywords: 'xray how built inspect performance debug',
+    run: () => toggleXray(),
   })
   answers.forEach((a, i) => items.push({ kind: 'ask', id: 'ask-' + i, label: a.q, keywords: a.keywords, answer: a.a }))
   return items
