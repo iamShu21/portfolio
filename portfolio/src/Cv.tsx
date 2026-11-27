@@ -62,30 +62,28 @@ export function CvDialog() {
       // A click that lands on the <dialog> itself (not its content) is a click on the backdrop.
       onClick={(ev) => ev.target === ref.current && ref.current.close()}
       aria-labelledby="cv-title"
-      className="m-auto max-h-none w-[min(94vw,52rem)] max-w-none bg-transparent p-0 text-[#e8e8f2] backdrop:bg-black/80"
+      className="m-auto max-h-none w-[min(94vw,52rem)] max-w-none bg-transparent p-0 text-fg backdrop:bg-black/80"
     >
       {open && (
         // Sized to the CV, up to the screen height; the CV scrolls inside when it's taller.
-        <div className="flex max-h-[94svh] flex-col rounded-3xl border border-line bg-panel">
+        <div className="flex max-h-[94svh] flex-col rounded-3xl border border-line bg-card">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-4 py-3 md:px-5">
             <h2 id="cv-title" className="font-mono text-sm font-bold uppercase tracking-widest">
               Curriculum vitae
             </h2>
             <div className="flex gap-2">
-              <a href={BASE + cv.pdf} download className={cn(btn, 'border-neon text-neon hover:bg-neon hover:text-black')}>
+              <a href={BASE + cv.pdf} download className={cn(btn, 'border-fg bg-fg text-bg hover:border-accent-fill hover:bg-accent-fill hover:text-on-fill')}>
                 Download PDF
               </a>
-              <button type="button" onClick={() => ref.current?.close()} className={cn(btn, 'border-white/20 hover:border-neon hover:text-neon')}>
+              <button type="button" onClick={() => ref.current?.close()} className={cn(btn, 'border-line hover:border-accent hover:text-accent')}>
                 Close
               </button>
             </div>
           </div>
-          {/* data-lenis-prevent: Lenis is stopped while the dialog is open and would swallow the wheel. */}
           <div
             ref={body}
             tabIndex={0}
             aria-label="CV, scrollable"
-            data-lenis-prevent
             className="min-h-0 flex-1 overflow-y-auto overscroll-contain rounded-b-3xl p-3 md:p-4"
           >
             <img

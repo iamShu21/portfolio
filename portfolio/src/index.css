@@ -1,49 +1,72 @@
 @import 'tailwindcss';
 
-@theme {
-  --font-sans: 'Space Grotesk', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
-  --color-ink: #07070d;
-  --color-panel: #0f0f1a;
-  --color-line: #23233a;
-  --color-neon: #7cf7c8;
-  --color-pink: #ff5ca8;
-  --color-gold: #f5b301;
+/*
+ * Colours are CSS variables so one set of classes (bg-bg, text-muted, border-line…) works in
+ * both themes. index.html sets <html data-theme> before first paint; src/theme.ts changes it.
+ * Every text colour below meets WCAG AA (4.5:1) on --bg and --card in its theme.
+ */
+@theme inline {
+  --font-sans: 'Geist', system-ui, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-card: var(--card);
+  /* Accent for text and strokes; --accent-fill is the bright neon used behind dark text. */
+  --color-accent: var(--accent);
+  --color-accent-fill: var(--accent-fill);
+  --color-gold: var(--gold);
+  /* Fixed colour for text that sits on the bright neon or gold fills. */
+  --color-on-fill: #0b0b10;
+}
+
+:root {
+  color-scheme: light;
+  --bg: #fafaf8;
+  --fg: #18181b;
+  --muted: #57575f;
+  --line: #e4e4e0;
+  --card: #ffffff;
+  --accent: #047857;
+  --accent-fill: #7cf7c8;
+  --gold: #a35f00;
+}
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #0b0b10;
+  --fg: #ececf1;
+  --muted: #a3a3ad;
+  --line: #26262f;
+  --card: #121218;
+  --accent: #7cf7c8;
+  --accent-fill: #7cf7c8;
+  --gold: #f5b301;
 }
 
 html,
 body {
-  background: var(--color-ink);
-  color: #e8e8f2;
+  background: var(--bg);
+  color: var(--fg);
   font-family: var(--font-sans);
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 ::selection {
-  background: var(--color-neon);
-  color: #000;
+  background: var(--accent-fill);
+  color: #0b0b10;
 }
 
-.marquee-track {
-  display: flex;
-  width: max-content;
-  animation: marquee 28s linear infinite;
-}
-@keyframes marquee {
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .marquee-track {
-    animation: none;
-  }
-}
-
-/* Anchor targets clear the fixed header (Lenis handles this too; this covers native jumps). */
+/* Anchor targets clear the sticky header. */
 section[id] {
-  scroll-margin-top: 80px;
+  scroll-margin-top: 72px;
 }
 /* Sections receive focus after an in-page jump (for keyboard users); no ring needed there. */
 section[tabindex='-1']:focus,
@@ -51,19 +74,36 @@ main[tabindex='-1']:focus {
   outline: none;
 }
 
-/* A visible keyboard focus ring everywhere (the custom cursor gives no focus cue). */
+/* A visible keyboard focus ring everywhere. */
 :focus-visible {
-  outline: 2px solid var(--color-neon);
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
 
-/* Modal dialogs sit in the top layer, above the custom cursor, so give them the native one. */
-dialog {
-  cursor: auto;
-}
-dialog a,
-dialog button,
-dialog video {
-  cursor: pointer;
+/* Theme switch: a circle grows from the toggle (View Transitions API, see theme.ts). */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
 }
 
+/* Entrances. Scroll-driven where supported; without support (or with reduced motion) the
+   content is simply there, never stuck invisible waiting for JS. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    translate: 0 14px;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .rise {
+    animation: rise 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 35%;
+    }
+  }
+}

@@ -4,13 +4,24 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#07070d" />
-    <meta name="description" content="Shuhari Alaihim Amoran, full-stack developer. Web, 3D and AR, including ExploreNDMU, an AR campus navigation app." />
+    <meta name="theme-color" content="#fafaf8" />
+    <meta name="description" content="Shuhari Alaihim Amoran, full-stack developer. Web, mobile and AR, including ExploreNDMU, an AR campus navigation app." />
     <title>Shuhari Alaihim Amoran | Full-Stack Developer</title>
+    <!-- Theme before first paint (no flash): the saved choice, else the system setting. -->
+    <script>
+      ;(function () {
+        var t = null
+        try {
+          t = localStorage.getItem('theme')
+        } catch (e) {}
+        var dark = t ? t === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light'
+      })()
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
   </head>

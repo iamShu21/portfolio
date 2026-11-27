@@ -6,6 +6,16 @@ export const profile = {
   tagline: 'I build things that work on screens, in 3D, and in the real world.',
   bio: 'A student developer who likes taking an idea from database to pixels. I built an AR campus navigation app for my university and I am always looking for the next thing to break and rebuild better.',
   location: 'Koronadal City, Philippines',
+  /** Short availability line shown in the hero with a green dot. Empty hides it. */
+  status: 'Open to internships',
+  /** A square photo in public/, e.g. 'me.webp'. Empty shows initials instead. */
+  photo: '',
+  /** Three proof points under the hero. */
+  stats: [
+    { n: '1', k: 'AR app shipped' },
+    { n: '60', k: 'campus routes walked' },
+    { n: '4', k: 'student-org roles' },
+  ],
   // Leave email, linkedin or facebook empty ('') to hide them on the page.
   email: 'shuharidalandas@gmail.com',
   github: 'https://github.com/iamShu21',
@@ -29,6 +39,8 @@ export type Project = {
   blurb: string
   tags: string[]
   featured?: boolean
+  /** Optional cover image in public/. */
+  image?: { src: string; w: number; h: number; alt: string }
   /** Drafts stay in this file but aren't shown. Remove `draft` to publish a card. */
   draft?: boolean
   links: { label: string; href: string }[]
@@ -42,6 +54,12 @@ export const projects: Project[] = [
       'An augmented-reality campus tour and navigation app for Notre Dame of Marbel University. Follow gold AR arrows along routes surveyed on foot, take a narrated campus tour, search a building directory, and point the camera at printed markers to see 3D models.',
     tags: ['Unity 6', 'C#', 'AR Foundation', 'ARCore', 'Android'],
     featured: true,
+    image: {
+      src: 'projects/explorendmu/follow-cam.webp',
+      w: 960,
+      h: 540,
+      alt: 'A student walks under a covered campus walkway holding up a tablet that shows gold AR arrows on the path ahead',
+    },
     links: [
       { label: 'Case study ↓', href: '#explorendmu' },
       { label: 'Live site', href: 'https://explorendmu.github.io/' },
@@ -138,37 +156,12 @@ export const explorendmu = {
   ],
 }
 
-/** The scrolling marquee in the Stack section. */
-export const stack = [
-  'React',
-  'TypeScript',
-  'Next.js',
-  'Node.js',
-  'Laravel',
-  'Java',
-  'C#',
-  'C++',
-  'Unity',
-  'Flutter',
-  'MySQL',
-  'PostgreSQL',
-  'Three.js',
-  'Blender',
-  'Astro',
-  'Tailwind',
-  'Git',
-  'Docker',
-  'Python',
-  'QGIS',
-]
-
-/** Skills bento (Stack section). Edit freely. */
+/** Skills, grouped (Stack section). Edit freely. */
 export const skills = {
   frontend: {
     title: 'Frontend',
-    blurb: 'Interfaces that feel fast and a little playful. This site: React, R3F, GSAP and Lenis.',
+    blurb: 'Interfaces that feel fast and a little playful. This site: React, Tailwind and plain web APIs, no UI kit.',
     items: ['JavaScript', 'TypeScript', 'React', 'Next.js', 'Astro', 'HTML5', 'CSS3', 'Tailwind', 'Three.js'],
-    snippet: ['<Canvas eventSource={root}>', '  <Core onPointerOver={charge} />', '  <Campus routes={walks} />', '</Canvas>'],
   },
   xr: {
     title: '3D, AR & mobile',
@@ -191,10 +184,3 @@ export const skills = {
     blurb: 'React Three Fiber: shaders, scissor views and keeping 3D at 60 fps on phones.',
   },
 }
-
-export const facts = [
-  { k: 'Focus', v: 'Full-stack web + 3D/AR' },
-  { k: 'Status', v: 'Student, open to internships' },
-  { k: 'Shipped', v: 'ExploreNDMU (Android AR app)' },
-  { k: 'Currently', v: 'Learning React Three Fiber' },
-]
