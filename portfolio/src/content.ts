@@ -218,3 +218,21 @@ export const journey: Milestone[] = [
   { years: '2017 – 2021', from: 2017, kind: 'education', title: 'Junior High School', org: 'Notre Dame of Esperanza Inc.' },
   { years: '2010 – 2017', from: 2010, kind: 'education', title: 'Primary', org: 'Esperanza Elementary School' },
 ]
+
+/* ---------- Now strip (hero) ---------- */
+
+export const now = {
+  timeZone: 'Asia/Manila',
+  city: 'Koronadal',
+  learning: 'React Three Fiber shaders',
+  /** What you're probably doing, by local hour. Each entry starts at `from` (0–23). */
+  moods: [
+    { from: 0, text: 'probably asleep. or debugging.' },
+    { from: 5, text: 'early start, coffee and docs' },
+    { from: 9, text: 'in class or shipping something' },
+    { from: 12, text: 'lunch break' },
+    { from: 13, text: 'building and breaking things' },
+    { from: 18, text: 'dinner, then back to the editor' },
+    { from: 21, text: 'late-night coding session' },
+  ],
+}

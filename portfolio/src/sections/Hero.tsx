@@ -4,6 +4,7 @@ import { FacebookIcon, GitHubIcon, LinkedInIcon, MailIcon, PinIcon } from '../ic
 import { Rise } from '../ui'
 import { button } from '../lib/styles'
 import { cn } from '../lib/utils'
+import NowStrip from '../features/NowStrip'
 
 const BASE = import.meta.env.BASE_URL
 
@@ -115,6 +116,7 @@ export default function Hero() {
             </div>
           ))}
         </dl>
+        <NowStrip />
       </Rise>
     </section>
   )
