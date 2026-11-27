@@ -236,3 +236,39 @@ export const now = {
     { from: 21, text: 'late-night coding session' },
   ],
 }
+
+/* ---------- "Where to?" wayfinder (⌘K) ---------- */
+
+/** Canned answers. `keywords` help the search find them. Keep answers short and true. */
+export const answers = [
+  {
+    q: 'Are you open to internships?',
+    keywords: 'job hire work intern available ojt',
+    a: `Yes. I'm a BS Information Technology student at Notre Dame of Marbel University, looking for internships in web, mobile or AR development. Email is the fastest way to reach me: ${profile.email}.`,
+  },
+  {
+    q: 'Where are you based?',
+    keywords: 'location city country timezone',
+    a: 'Koronadal City, Philippines. That is UTC+8, the time in the strip at the top of the page.',
+  },
+  {
+    q: 'What is ExploreNDMU?',
+    keywords: 'ar app capstone campus navigation',
+    a: explorendmu.lead,
+  },
+  {
+    q: 'What did you do on ExploreNDMU?',
+    keywords: 'role team capstone contribution',
+    a: `${explorendmu.role}. ${explorendmu.team}`,
+  },
+  {
+    q: 'What is your main stack?',
+    keywords: 'skills tech languages frameworks',
+    a: 'Web: TypeScript, React, Next.js, Node.js and Laravel with MySQL. Mobile and AR: Unity, C#, AR Foundation and ARCore on Android. The stack section has the full list.',
+  },
+  {
+    q: 'How was this site built?',
+    keywords: 'portfolio react tailwind vite source',
+    a: 'React 19, Tailwind CSS 4 and Vite, with no UI kit and no animation library: native <dialog>, CSS scroll-driven animations and SVG.',
+  },
+]

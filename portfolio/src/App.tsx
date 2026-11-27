@@ -7,6 +7,7 @@ import Journey from './sections/Journey'
 import Stack from './sections/Stack'
 import Contact from './sections/Contact'
 import Footer from './sections/Footer'
+import Wayfinder from './features/Wayfinder'
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
       </main>
       <Footer />
       <CvDialog />
+      <Wayfinder />
     </>
   )
 }

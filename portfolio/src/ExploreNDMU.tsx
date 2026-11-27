@@ -84,7 +84,7 @@ function Gallery() {
   }
 
   return (
-    <div className="mt-12" data-xray="Gallery · CSS scroll-snap, clips load only when opened">
+    <div id="screens" className="mt-12 scroll-mt-20" data-xray="Gallery · CSS scroll-snap, clips load only when opened">
       <div className="mb-4 flex items-end justify-between gap-4">
         <h3 className="font-medium">
           Screens from the app
@@ -190,7 +190,7 @@ export default function ExploreNDMU() {
         </ul>
       </div>
 
-      <div className="mt-12">
+      <div id="how-it-works" className="mt-12 scroll-mt-20">
         <h3 className="font-medium">How it works</h3>
         <p className="mt-1 leading-relaxed text-muted">
           The hard work happens before the app is installed. Routes are built once from real walks, and the phone only follows them, so a walk never needs the internet.

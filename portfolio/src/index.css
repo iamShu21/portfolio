@@ -44,40 +44,42 @@
   --gold: #f5b301;
 }
 
-html,
-body {
-  background: var(--bg);
-  color: var(--fg);
-  font-family: var(--font-sans);
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-behavior: smooth;
+/* Base styles sit in the base layer so Tailwind utilities (outline-none…) can override them. */
+@layer base {
+  html,
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
   }
-}
 
-::selection {
-  background: var(--accent-fill);
-  color: #0b0b10;
-}
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
 
-/* Anchor targets clear the sticky header. */
-section[id] {
-  scroll-margin-top: 72px;
-}
-/* Sections receive focus after an in-page jump (for keyboard users); no ring needed there. */
-section[tabindex='-1']:focus,
-main[tabindex='-1']:focus {
-  outline: none;
-}
+  ::selection {
+    background: var(--accent-fill);
+    color: #0b0b10;
+  }
 
-/* A visible keyboard focus ring everywhere. */
-:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
+  /* Anchor targets clear the sticky header. */
+  section[id] {
+    scroll-margin-top: 72px;
+  }
+  /* Sections receive focus after a jump (for keyboard and screen-reader users); no ring needed there. */
+  [tabindex='-1']:focus {
+    outline: none;
+  }
+
+  /* A visible keyboard focus ring everywhere. */
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
 }
 
 /* Theme switch: a circle grows from the toggle (View Transitions API, see theme.ts). */
@@ -105,5 +107,49 @@ main[tabindex='-1']:focus {
       animation-timeline: view();
       animation-range: entry 0% entry 35%;
     }
+  }
+}
+
+/* Wayfinder (features/Wayfinder.tsx): chevrons light up one after another in the walking
+   direction, the toast drops in, and the section you arrive at gets a short gold outline. */
+@keyframes chevron {
+  0%,
+  100% {
+    opacity: 0.15;
+  }
+  30% {
+    opacity: 1;
+  }
+}
+.wayfinder-chevron {
+  opacity: 0.15;
+  animation: chevron 0.9s ease-in-out infinite;
+}
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    translate: 0 -8px;
+  }
+}
+.arrival-toast {
+  animation: toast-in 0.25s ease-out both;
+}
+@keyframes arrived {
+  from {
+    outline-color: var(--gold);
+  }
+  to {
+    outline-color: transparent;
+  }
+}
+.arrived {
+  outline: 2px solid transparent;
+  outline-offset: 10px;
+  border-radius: 1rem;
+  animation: arrived 1.8s ease-out both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .arrival-toast {
+    animation: none;
   }
 }
