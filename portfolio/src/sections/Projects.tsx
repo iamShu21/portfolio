@@ -20,10 +20,23 @@ function ProjectCard({ p }: { p: Project }) {
         </div>
       )}
       <div className="p-5 sm:p-6">
-        <p className="font-mono text-xs text-accent">{p.kind}</p>
+        <p className="flex items-baseline justify-between gap-3 font-mono text-xs">
+          <span className="text-accent">{p.kind}</span>
+          <span className="shrink-0 text-muted">{p.year}</span>
+        </p>
         <h3 className="mt-2 text-xl font-semibold tracking-tight">{p.title}</h3>
         <p className="mt-2 leading-relaxed text-muted">{p.blurb}</p>
-        <ul className="mt-4 flex flex-wrap gap-1.5">
+        {p.highlights && (
+          <ul className="mt-4 space-y-1.5 text-sm" aria-label="What I built">
+            {p.highlights.map((h) => (
+              <li key={h} className="flex gap-2.5">
+                <span aria-hidden className="mt-[0.55rem] h-1 w-1 shrink-0 rounded-full bg-accent" />
+                <span>{h}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+        <ul className="mt-5 flex flex-wrap gap-1.5">
           {p.tags.map((t) => (
             <li key={t}>
               <Pill>{t}</Pill>

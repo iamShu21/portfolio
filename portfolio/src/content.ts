@@ -4,18 +4,12 @@ export const profile = {
   name: 'Shuhari Alaihim Amoran',
   role: 'Full-Stack Developer',
   tagline: 'I build things that work on screens, in 3D, and in the real world.',
-  bio: 'A student developer who likes taking an idea from database to pixels. I built an AR campus navigation app for my university and I am always looking for the next thing to break and rebuild better.',
+  bio: 'An IT student at Notre Dame of Marbel University who builds full-stack web apps, desktop systems and, with my capstone team, an AR guide for our campus. I like owning a feature from the database to the last pixel.',
   location: 'Koronadal City, Philippines',
   /** Short availability line shown in the hero with a green dot. Empty hides it. */
   status: 'Open to internships',
   /** A square photo in public/ (me.webp is cropped from the CV). Empty shows initials instead. */
   photo: 'me.webp',
-  /** Three proof points under the hero. */
-  stats: [
-    { n: '1', k: 'AR app shipped' },
-    { n: '60', k: 'campus routes walked' },
-    { n: '4', k: 'student-org roles' },
-  ],
   // Leave email, linkedin or facebook empty ('') to hide them on the page.
   email: 'shuharidalandas@gmail.com',
   github: 'https://github.com/iamShu21',
@@ -36,7 +30,10 @@ export const profile = {
 export type Project = {
   title: string
   kind: string
+  year: string
   blurb: string
+  /** What you built, one line each. Concrete beats clever. */
+  highlights?: string[]
   tags: string[]
   featured?: boolean
   /** Optional cover image in public/. */
@@ -50,8 +47,14 @@ export const projects: Project[] = [
   {
     title: 'ExploreNDMU',
     kind: 'AR · Android · Capstone',
+    year: '2026',
     blurb:
-      'An augmented-reality campus tour and navigation app for Notre Dame of Marbel University. Follow gold AR arrows along routes surveyed on foot, take a narrated campus tour, search a building directory, and point the camera at printed markers to see 3D models.',
+      'An augmented-reality campus tour and navigation app for Notre Dame of Marbel University. Gold AR arrows lead you along routes the team surveyed on foot, with a narrated tour, a building directory and 3D models on printed markers.',
+    highlights: [
+      'Full-stack developer in a team of three',
+      '60 walks recorded on campus, joined into 1,194 routes with Dijkstra’s algorithm',
+      'Works with no signal: routes, place cards and voice lines live on the phone',
+    ],
     tags: ['Unity 6', 'C#', 'AR Foundation', 'ARCore', 'Android'],
     featured: true,
     image: {
@@ -62,27 +65,44 @@ export const projects: Project[] = [
     },
     links: [
       { label: 'Case study ↓', href: '#explorendmu' },
-      { label: 'Live site', href: 'https://explorendmu.github.io/' },
+      { label: 'Showcase site', href: 'https://explorendmu.github.io/' },
     ],
   },
   {
-    title: 'Project Two',
-    draft: true,
-    kind: 'Web · Full-stack',
-    blurb: 'Replace this with a web project: what it does, who it is for, and the one hard problem you solved.',
-    tags: ['React', 'Node.js', 'PostgreSQL'],
-    links: [
-      { label: 'Live', href: '#' },
-      { label: 'Code', href: '#' },
+    title: 'SSG Payment System',
+    kind: 'Web · Full-stack · Class project',
+    year: '2026',
+    blurb:
+      'A payment portal designed for NDMU’s Supreme Student Government. Moderators set up fees and officers, students pay online and track what they owe, and officers review payments and issue receipts.',
+    highlights: [
+      'Online checkout through PayMongo: GCash, Maya or card',
+      'Three roles (moderator, officer, student) behind JWT login, each with its own dashboard',
+      'Express REST API on MySQL with SQL migrations, audit logs, reports and yearly receipt numbers',
+      'PDF receipts, payment history, notifications, and light and dark themes',
     ],
+    tags: ['React', 'Tailwind', 'Express', 'MySQL', 'JWT', 'PayMongo'],
+    image: {
+      src: 'projects/ssg-payment/portal.webp',
+      w: 1280,
+      h: 668,
+      alt: 'The SSG Payment Portal sign-in page: a login form beside cards for verified payments, role-based access and a step-by-step payment guide',
+    },
+    links: [{ label: 'Code', href: 'https://github.com/iamShu21/ssg-payment-system' }],
   },
   {
-    title: 'Project Three',
-    draft: true,
-    kind: 'API · Backend',
-    blurb: 'Another project. Keep it to two sentences and link to the live demo.',
-    tags: ['TypeScript', 'Express', 'Docker'],
-    links: [{ label: 'Code', href: '#' }],
+    title: 'Point-of-Sale System',
+    kind: 'Desktop · Java',
+    year: '2026',
+    blurb:
+      'A desktop point-of-sale app: ring up sales at the register and manage products, categories, inventory, suppliers and staff accounts, with reports and sales history, all on MySQL.',
+    highlights: [
+      'A register with a cart, running totals, automatic change and receipts',
+      '11 screens, from the dashboard to reports, sales history and a login history',
+      'A custom Swing UI kit: glass panels, gradient and neon buttons, rounded inputs',
+      'Rebuilt from my first version with a redesigned interface and more modules',
+    ],
+    tags: ['Java', 'Swing', 'MySQL', 'JDBC', 'NetBeans'],
+    links: [{ label: 'Code', href: 'https://github.com/iamShu21/final-pos-system' }],
   },
 ]
 
@@ -281,3 +301,14 @@ export const ar = {
   /** Closer than this counts as "You have arrived". */
   arriveKm: 0.3,
 }
+
+/* ---------- Hero stats (counted from the content above, so they stay true) ---------- */
+
+const shown = projects.filter((p) => !p.draft)
+const tools = new Set(Object.values(skills).flatMap((g) => ('items' in g ? g.items : [])))
+
+export const heroStats = [
+  { n: String(shown.length), k: 'apps built: web, desktop, AR' },
+  { n: String(journey.filter((m) => m.kind === 'activity').length), k: 'student-org roles' },
+  { n: `${tools.size}`, k: 'languages and tools' },
+]

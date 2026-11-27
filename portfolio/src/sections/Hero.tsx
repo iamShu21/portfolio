@@ -1,4 +1,4 @@
-import { profile } from '../content'
+import { heroStats, profile } from '../content'
 import { CvLink } from '../Cv'
 import { FacebookIcon, GitHubIcon, LinkedInIcon, MailIcon, PinIcon } from '../icons'
 import { Rise } from '../ui'
@@ -119,8 +119,8 @@ export default function Hero() {
       </Rise>
 
       <Rise step={3}>
-        <dl data-xray="Stats · a <dl>, numbers read before labels" className="mt-10 grid grid-cols-3 divide-x divide-line rounded-2xl border border-line bg-card">
-          {profile.stats.map((s) => (
+        <dl data-xray="Stats · counted from content.ts at build time, never typed by hand" className="mt-10 grid grid-cols-3 divide-x divide-line rounded-2xl border border-line bg-card">
+          {heroStats.map((s) => (
             <div key={s.k} className="flex flex-col-reverse gap-0.5 px-3 py-4 sm:px-5">
               <dt className="text-xs text-muted sm:text-sm">{s.k}</dt>
               <dd className="font-mono text-2xl font-medium sm:text-3xl">{s.n}</dd>
