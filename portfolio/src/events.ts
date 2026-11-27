@@ -8,3 +8,6 @@ export const OPEN_WAYFINDER = 'wayfinder:open'
 
 /** Event: open the AR walk ("Walk to NDMU"). */
 export const OPEN_AR = 'ar:open'
+
+/** CustomEvent<{ id: string; label: string }>: walk to a section with the wayfinder's guide. */
+export const WAYFINDER_GO = 'wayfinder:go'

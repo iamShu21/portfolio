@@ -1,6 +1,6 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { answers, profile } from '../content'
-import { OPEN_AR, OPEN_CV, OPEN_WAYFINDER } from '../events'
+import { OPEN_AR, OPEN_CV, OPEN_WAYFINDER, WAYFINDER_GO } from '../events'
 import { lockScroll } from '../scroll'
 import { getTheme, toggleTheme } from '../theme'
 import { isXray, toggleXray } from '../xray'
@@ -161,6 +161,7 @@ export default function Wayfinder() {
   const [notice, setNotice] = useState<{ text: string; sub: string; pin?: boolean } | null>(null)
   const uid = useId()
   const mac = useIsMac()
+  const goRef = useRef<(id: string, label: string) => Promise<void>>(async () => {})
 
   // Rebuilt on every open, so labels like "switch to dark theme" are current.
   const items = useMemo(() => (open ? buildItems() : []), [open])
@@ -179,11 +180,18 @@ export default function Wayfinder() {
       }
     }
     const onOpen = () => setOpen(true)
+    // Other parts of the page (the page map) can ask for a guided walk too.
+    const onGo = (e: Event) => {
+      const { id, label } = (e as CustomEvent<{ id: string; label: string }>).detail
+      void goRef.current(id, label)
+    }
     window.addEventListener('keydown', onKey)
     window.addEventListener(OPEN_WAYFINDER, onOpen)
+    window.addEventListener(WAYFINDER_GO, onGo)
     return () => {
       window.removeEventListener('keydown', onKey)
       window.removeEventListener(OPEN_WAYFINDER, onOpen)
+      window.removeEventListener(WAYFINDER_GO, onGo)
     }
   }, [])
 
@@ -228,6 +236,10 @@ export default function Wayfinder() {
     el.classList.add('arrived')
     setNotice({ text: 'You have arrived', sub: label, pin: true })
   }
+
+  useEffect(() => {
+    goRef.current = go
+  })
 
   useEffect(() => {
     if (!notice) return
