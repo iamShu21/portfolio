@@ -39,8 +39,8 @@ export function Section({
  * Fades and lifts its children in as they scroll into view. Pure CSS (scroll-driven animation,
  * see index.css): no JS, and browsers without support or with reduced motion just show it.
  */
-export function Reveal({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <div className={cn('reveal', className)}>{children}</div>
+export function Reveal({ children, className, as: Tag = 'div' }: { children: React.ReactNode; className?: string; as?: 'div' | 'li' }) {
+  return <Tag className={cn('reveal', className)}>{children}</Tag>
 }
 
 /** Like Reveal, but plays once on page load, `step` × 60 ms after the first. For the hero. */
