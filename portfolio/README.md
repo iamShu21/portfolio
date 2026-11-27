@@ -1,8 +1,12 @@
 # Shuhari Alaihim Amoran: portfolio
 
-A portfolio site with a 3D background, a 3D map of the ExploreNDMU campus routes, and a case study of the app.
+A calm, single-column portfolio with a light and dark theme, numbered sections, and an ExploreNDMU case study. It has three extras:
 
-Built with Vite, React, TypeScript, Tailwind CSS v4, React Three Fiber and drei, GSAP ScrollTrigger, Lenis and Framer Motion.
+- **Where to? (⌘K / Ctrl+K, or `/`)**: a command palette framed like ExploreNDMU's "Navigate here". Pick a section and the page walks you there with gold arrows and a metre countdown, then says "You have arrived". It also runs actions such as copying the email or opening the CV, and answers common questions.
+- **Now strip**: your local time in Koronadal with a guess at what you're doing, what you're learning, and your latest public GitHub push.
+- **X-ray mode (X)**: outlines each part of the page with a note on how it's built, plus live numbers for what the page cost the browser.
+
+Built with Vite, React 19, TypeScript and Tailwind CSS v4. Beyond React it adds no UI kit and no animation library: it uses native `<dialog>`, CSS scroll-driven animations, SVG/SMIL and the View Transitions API.
 
 ## Run it
 
@@ -14,24 +18,39 @@ npm run preview    # serve dist/ locally
 npm run lint
 ```
 
-Useful URL flags: `?stats` shows an FPS meter, and `?nowebgl` shows the no-WebGL fallbacks.
-
 ## Editing content
 
-All text lives in `src/content.ts`, including the profile, projects, skills and the ExploreNDMU case study.
-The case-study images and clips are in `public/projects/explorendmu/`. The campus route data is in `src/three/campus.json`.
+All text lives in `src/content.ts`:
+- the profile (with `status`, `stats` and an optional square `photo` in `public/`)
+- projects
+- the ExploreNDMU case study
+- the journey timeline
+- skills
+- the Now strip (`now`)
+- the wayfinder's canned answers (`answers`)
+
+The case-study images and clips are in `public/projects/explorendmu/`. The campus route data is in `src/data/campus.json`.
 The CV (an image for the dialog and a PDF to download) is in `public/cv/`, and `profile.cv` in `content.ts` points to it.
 The published copy leaves out the phone number, birth date and home address. Keep it that way when you swap in a new CV.
 
 ## How it's put together
 
-- `src/App.tsx`: page sections; loads the 3D scene lazily after first paint
-- `src/Scene.tsx`: the one WebGL canvas. It's driven from GSAP's ticker right after Lenis scrolls, and it draws the campus map into its page element with a scissor pass
-- `src/three/`: the hero core (hover/click reactive) and the campus map
-- `src/Transition.tsx`: the wipe animation on long in-page jumps
+- `src/App.tsx`: the page; sections live in `src/sections/`
+- `src/index.css`: colour tokens for both themes (every text colour passes WCAG AA), entrance animations, wayfinder and X-ray styles
+- `src/theme.ts` + `index.html`: the theme is set before first paint, follows the system until you pick one, and the switch grows out of the toggle
+- `src/features/Wayfinder.tsx`: the ⌘K palette (native `<dialog>` + ARIA combobox) and the guided walk
+- `src/features/NowStrip.tsx`: the clock and the latest push. The push comes from `virtual:latest-push`, a plugin in `vite.config.ts` that calls the GitHub API **once per build**, so visitors never do
+- `src/features/RouteMap.tsx`: the 60 surveyed campus walks as SVG, with chevrons walking the featured route
+- `src/features/Xray.tsx` + `src/xray.ts`: X-ray mode. Add a `data-xray="Name · how it's built"` attribute to any element to label it
 - `src/ExploreNDMU.tsx`: the case study (gallery with clip dialog, features, how it works)
 
-With `prefers-reduced-motion`, the canvas draws only when something changes, nothing loops, and in-page jumps are instant.
+With `prefers-reduced-motion` there are no entrance animations, the map's chevrons stand still, and wayfinder jumps are instant.
+
+### Latest GitHub push
+
+The build asks GitHub for your newest public push without a token, and that shared limit is 60 requests an hour.
+On Vercel, add a `GITHUB_TOKEN` environment variable (a fine-grained token with no extra permissions is enough) so builds never hit the limit.
+If the request fails, the build still succeeds and the "pushed" line is simply hidden. Pushes to private repos never show.
 
 ## Deploy
 
@@ -46,7 +65,7 @@ With `prefers-reduced-motion`, the canvas draws only when something changes, not
 
 `public/og.jpg` (1200×630) is the image shown when the link is shared. Link previews need its full URL, and a build plugin in `vite.config.ts` adds the tags.
 On Vercel the project sets `SITE_URL=https://shuhari-dev.vercel.app` (Settings → Environment Variables). Without it, the build falls back to Vercel's production domain. Anywhere else, build with `SITE_URL` set to the site's public address, for example `SITE_URL=https://iamshu21.github.io/portfolio`.
-If you change the hero, retake the screenshot at 1200×630.
+If you change the hero, make a new 1200×630 image to match.
 
 ### GitHub Pages
 
