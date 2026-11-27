@@ -1,48 +1,15 @@
-import { lazy, Suspense, useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { LazyMotion, MotionConfig, m, useMotionValue, useSpring } from 'framer-motion'
-import SceneFallback from './SceneFallback'
-import { hasWebGL } from './webgl'
-import Cursor from './Cursor'
-import { emitScrollChange, gsap, scrollState, ScrollTrigger, useSmoothScroll, type CoreSpot } from './scroll'
 import { useReducedMotion } from './motion'
 import { explorendmu, facts, profile, projects, skills, stack, type Project } from './content'
 import { BentoCard, BentoGrid, Chips } from './components/Bento'
 import { SectionLabel, TextLink } from './ui'
 import ExploreNDMU from './ExploreNDMU'
-import Transition from './Transition'
 import { CvDialog, CvLink } from './Cv'
 
 const YEAR = new Date().getFullYear()
 
 const loadMotionFeatures = () => import('./motionFeatures').then((mod) => mod.default)
-
-// Three.js + R3F + drei live in their own chunk, fetched once the page has painted.
-const Scene = lazy(() => import('./Scene'))
-
-/** Static glow first; the 3D scene loads when the browser is idle (never without WebGL). */
-function Background() {
-  const [load, setLoad] = useState(false)
-  useEffect(() => {
-    if (!hasWebGL()) return
-    const start = () => setLoad(true)
-    if ('requestIdleCallback' in window) {
-      const id = requestIdleCallback(start, { timeout: 1500 })
-      return () => cancelIdleCallback(id)
-    }
-    const t = setTimeout(start, 300)
-    return () => clearTimeout(t)
-  }, [])
-  return (
-    <>
-      <SceneFallback />
-      {load && (
-        <Suspense fallback={null}>
-          <Scene />
-        </Suspense>
-      )}
-    </>
-  )
-}
 
 /* ---------- small pieces ---------- */
 
@@ -381,53 +348,12 @@ function Contact() {
 /* ---------- app ---------- */
 
 export default function App() {
-  useSmoothScroll()
-  const reduced = useReducedMotion()
-  const root = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Tell the 3D core where to sit for the section in the middle of the screen. Blocks can
-      // nest (a block inside a section), so the innermost active one (last in DOM order) wins.
-      const triggers: ScrollTrigger[] = []
-      const pickSpot = () => {
-        const active = triggers.filter((t) => t.isActive).pop()
-        const spot = (active?.trigger as HTMLElement | undefined)?.dataset.core as CoreSpot | undefined
-        if (spot && spot !== scrollState.spot) {
-          scrollState.spot = spot
-          emitScrollChange()
-        }
-      }
-      gsap.utils.toArray<HTMLElement>('[data-core]').forEach((el) => {
-        triggers.push(ScrollTrigger.create({ trigger: el, start: 'top center', end: 'bottom center', onToggle: pickSpot }))
-      })
-
-      if (reduced) return
-      gsap.from('[data-word]', { yPercent: 110, duration: 1.1, ease: 'power4.out', stagger: 0.08, delay: 0.2 })
-      gsap.from('[data-hero]', { y: 24, opacity: 0, duration: 0.9, ease: 'power3.out', stagger: 0.12, delay: 0.6 })
-
-      gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => {
-        gsap.from(el, {
-          y: 50,
-          opacity: 0,
-          duration: 0.9,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' },
-        })
-      })
-    }, root)
-    return () => ctx.revert()
-  }, [reduced])
-
   return (
     // `m` components + lazily loaded features keep Framer Motion's animation engine out of the
     // main bundle; `strict` makes an accidental `motion.*` component an error.
     <LazyMotion features={loadMotionFeatures} strict>
     <MotionConfig reducedMotion="user">
-      <div ref={root} className="grain relative">
-        <Background />
-        <Cursor />
-        <Transition />
+      <div className="relative">
         <Nav />
         <main id="main" className="relative z-10">
           <Hero />
