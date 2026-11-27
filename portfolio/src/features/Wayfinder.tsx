@@ -5,7 +5,8 @@ import { lockScroll } from '../scroll'
 import { getTheme, toggleTheme } from '../theme'
 import { isXray, toggleXray } from '../xray'
 import { prefersReducedMotion } from '../motion'
-import { cn, isMac } from '../lib/utils'
+import { cn } from '../lib/utils'
+import { useIsMac } from '../lib/platform'
 
 /*
  * "Where to?" — a command palette framed like ExploreNDMU's "Navigate here". Pick a destination
@@ -152,6 +153,7 @@ export default function Wayfinder() {
   const [walk, setWalk] = useState<Walk | null>(null)
   const [notice, setNotice] = useState<{ text: string; sub: string; pin?: boolean } | null>(null)
   const uid = useId()
+  const mac = useIsMac()
 
   // Rebuilt on every open, so labels like "switch to dark theme" are current.
   const items = useMemo(() => (open ? buildItems() : []), [open])
@@ -250,7 +252,7 @@ export default function Wayfinder() {
     }
   }
 
-  const mod = isMac() ? '⌘' : 'Ctrl '
+  const mod = mac ? '⌘' : 'Ctrl '
 
   return (
     <>

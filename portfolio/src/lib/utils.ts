@@ -5,6 +5,3 @@ import { twMerge } from 'tailwind-merge'
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
-
-/** Apple keyboards show ⌘ where others show Ctrl. */
-export const isMac = () => /Mac|iPhone|iPad/.test(navigator.userAgent)

@@ -1,3 +1,5 @@
+import fs from 'node:fs'
+import path from 'node:path'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig, type HtmlTagDescriptor, type Plugin } from 'vite'
@@ -63,7 +65,28 @@ function latestPush(user: string): Plugin {
     return (await res.json()) as T
   }
   let cached: Promise<string> | null = null
+  // The pre-render build is a second Vite run in a new process; a short-lived file cache lets
+  // both builds (and dev restarts) share one lookup instead of calling GitHub each time.
+  const CACHE = 'node_modules/.cache/latest-push.json'
+  const fromCache = () => {
+    try {
+      const c = JSON.parse(fs.readFileSync(CACHE, 'utf8')) as { at: number; user: string; code: string }
+      return c.user === user && Date.now() - c.at < 10 * 60_000 ? c.code : null
+    } catch {
+      return null
+    }
+  }
+  const toCache = (code: string) => {
+    try {
+      fs.mkdirSync(path.dirname(CACHE), { recursive: true })
+      fs.writeFileSync(CACHE, JSON.stringify({ at: Date.now(), user, code }))
+    } catch {
+      /* caching is best-effort */
+    }
+  }
   const build = async () => {
+    const hit = fromCache()
+    if (hit) return hit
     try {
       type PushEvent = { type: string; created_at: string; repo: { name: string }; payload: { head?: string } }
       const events: PushEvent[] = await get(`/users/${user}/events/public?per_page=50`)
@@ -73,7 +96,9 @@ function latestPush(user: string): Plugin {
       if (!push) return 'export default null'
       const commit = await get<{ html_url: string; commit: { message: string } }>(`/repos/${push.repo.name}/commits/${push.payload.head}`)
       const message: string = commit.commit.message.split('\n')[0]
-      return `export default ${JSON.stringify({ repo: push.repo.name, message, url: commit.html_url, date: push.created_at })}`
+      const code = `export default ${JSON.stringify({ repo: push.repo.name, message, url: commit.html_url, date: push.created_at })}`
+      toCache(code)
+      return code
     } catch (err) {
       console.warn(`[latest-push] skipped: ${(err as Error).message}`)
       return 'export default null'
@@ -91,6 +116,7 @@ function latestPush(user: string): Plugin {
 
 export default defineConfig({
   base,
+  define: { __BUILD_YEAR__: JSON.stringify(new Date().getFullYear()) },
   // The GitHub account whose public pushes the Now strip shows (same as profile.github).
   plugins: [react(), tailwindcss(), socialMeta(), latestPush('iamShu21')],
 })

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useSyncExternalStore } from 'react'
 import latestPush from 'virtual:latest-push'
 import { now } from '../content'
 
@@ -20,16 +20,23 @@ function ago(iso: string, at: number) {
   return 'just now'
 }
 
+/*
+ * The current time, rounded to the half minute so the snapshot stays stable between checks.
+ * The server snapshot is null: the build must not bake its own clock into the HTML, so the
+ * time appears once React runs in the browser.
+ */
+const STEP = 30_000
+const nowRounded = () => Math.floor(Date.now() / STEP) * STEP
+function everyFewSeconds(onChange: () => void) {
+  const id = setInterval(onChange, 5_000)
+  return () => clearInterval(id)
+}
+const useClock = () => useSyncExternalStore(everyFewSeconds, nowRounded, () => null)
+
 /** Local time where I am, a guess at what I'm doing, what I'm learning, and my last public push. */
 export default function NowStrip() {
-  const [t, setT] = useState(() => Date.now())
-  useEffect(() => {
-    const id = setInterval(() => setT(Date.now()), 30_000)
-    return () => clearInterval(id)
-  }, [])
-
-  const hour = Number(hourOf.format(t))
-  const mood = [...now.moods].reverse().find((m) => hour >= m.from)?.text
+  const t = useClock()
+  const mood = t === null ? null : [...now.moods].reverse().find((m) => Number(hourOf.format(t)) >= m.from)?.text
 
   return (
     <div
@@ -38,12 +45,18 @@ export default function NowStrip() {
     >
       <p className="flex flex-wrap items-baseline gap-x-2 px-4 py-3">
         <span className="text-muted">now</span>
-        <time dateTime={new Date(t).toISOString()} className="text-fg">
-          {clock.format(t)}
-        </time>
+        {t !== null && (
+          <time dateTime={new Date(t).toISOString()} className="text-fg">
+            {clock.format(t)}
+          </time>
+        )}
         <span className="text-muted">in {now.city}</span>
-        <span className="text-muted">·</span>
-        <span className="text-fg">{mood}</span>
+        {mood && (
+          <>
+            <span className="text-muted">·</span>
+            <span className="text-fg">{mood}</span>
+          </>
+        )}
       </p>
       <p className="flex flex-wrap items-baseline gap-x-2 px-4 py-3">
         <span className="text-muted">learning</span>
@@ -63,7 +76,7 @@ export default function NowStrip() {
             {latestPush.message}
             <span className="sr-only"> in {latestPush.repo} (opens in a new tab)</span>
           </a>
-          <span className="shrink-0 text-muted">{ago(latestPush.date, t)}</span>
+          {t !== null && <span className="shrink-0 text-muted">{ago(latestPush.date, t)}</span>}
         </p>
       )}
     </div>

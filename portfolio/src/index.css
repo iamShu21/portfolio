@@ -5,6 +5,9 @@
  * both themes. index.html sets <html data-theme> before first paint; src/theme.ts changes it.
  * Every text colour below meets WCAG AA (4.5:1) on --bg and --card in its theme.
  */
+/* `dark:` follows the site's own theme switch, not only the system setting. */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
 @theme inline {
   --font-sans: 'Geist', system-ui, sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, monospace;

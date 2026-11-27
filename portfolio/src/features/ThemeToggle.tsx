@@ -16,7 +16,9 @@ export default function ThemeToggle() {
       title={`Switch to ${next} theme`}
       className="grid h-9 w-9 place-items-center rounded-full border border-line bg-card text-muted transition hover:border-accent hover:text-accent"
     >
-      {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
+      {/* Both icons are in the HTML; CSS shows the right one, even before React has loaded. */}
+      <SunIcon className="hidden h-4 w-4 dark:block" />
+      <MoonIcon className="h-4 w-4 dark:hidden" />
     </button>
   )
 }

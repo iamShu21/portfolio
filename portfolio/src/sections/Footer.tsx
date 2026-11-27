@@ -1,11 +1,13 @@
 import { profile } from '../content'
-import { isMac } from '../lib/utils'
+import { useIsMac } from '../lib/platform'
 import { toggleXray, useXray } from '../xray'
 
-const YEAR = new Date().getFullYear()
+// The build year (set in vite.config.ts): identical in the pre-rendered HTML and in the browser.
+const YEAR = __BUILD_YEAR__
 
 export default function Footer() {
   const xray = useXray()
+  const mac = useIsMac()
   return (
     <footer className="border-t border-line" data-xray="Footer · X-ray state lives on <html data-xray-on>">
       <div className="mx-auto flex max-w-2xl flex-wrap items-center justify-between gap-x-6 gap-y-3 px-4 py-8 font-mono text-xs text-muted sm:px-6">
@@ -14,7 +16,7 @@ export default function Footer() {
         </p>
         <div className="flex items-center gap-4">
           <p className="hidden sm:block">
-            <kbd>{isMac() ? '⌘K' : 'Ctrl K'}</kbd> where to · <kbd>X</kbd> x-ray
+            <kbd>{mac ? '⌘K' : 'Ctrl K'}</kbd> where to · <kbd>X</kbd> x-ray
           </p>
           <button
             type="button"

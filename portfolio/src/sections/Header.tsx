@@ -1,7 +1,7 @@
 import { profile } from '../content'
 import ThemeToggle from '../features/ThemeToggle'
 import { OPEN_WAYFINDER } from '../events'
-import { isMac } from '../lib/utils'
+import { useIsMac } from '../lib/platform'
 
 const NAV = [
   { id: 'projects', label: 'projects' },
@@ -19,6 +19,7 @@ const initials = (name: string) =>
     .join('')
 
 export default function Header() {
+  const mac = useIsMac()
   return (
     <header
       data-xray="Header · sticky, backdrop-blur only where supported"
@@ -52,14 +53,14 @@ export default function Header() {
           <button
             type="button"
             onClick={() => window.dispatchEvent(new Event(OPEN_WAYFINDER))}
-            aria-keyshortcuts={isMac() ? 'Meta+K' : 'Control+K'}
+            aria-keyshortcuts={mac ? 'Meta+K' : 'Control+K'}
             className="flex h-9 items-center gap-2 whitespace-nowrap rounded-full border border-line bg-card pl-3 pr-2 font-mono text-xs text-muted transition hover:border-gold hover:text-fg"
           >
             <svg aria-hidden viewBox="0 0 24 24" className="h-3.5 w-3.5 text-gold">
               <path d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21Z" fill="none" stroke="currentColor" strokeWidth={2.2} />
             </svg>
             where to?
-            <kbd className="hidden rounded border border-line px-1 text-[0.65rem] sm:inline">{isMac() ? '⌘K' : 'Ctrl K'}</kbd>
+            <kbd className="hidden rounded border border-line px-1 text-[0.65rem] sm:inline">{mac ? '⌘K' : 'Ctrl K'}</kbd>
           </button>
           <ThemeToggle />
         </div>

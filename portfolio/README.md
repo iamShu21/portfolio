@@ -13,7 +13,7 @@ Built with Vite, React 19, TypeScript and Tailwind CSS v4. Beyond React it adds 
 ```bash
 npm install
 npm run dev        # http://localhost:5173
-npm run build      # type-check + production build into dist/
+npm run build      # type-check, build, then pre-render the page into dist/index.html
 npm run preview    # serve dist/ locally
 npm run lint
 ```
@@ -36,6 +36,7 @@ The published copy leaves out the phone number, birth date and home address. Kee
 ## How it's put together
 
 - `src/App.tsx`: the page; sections live in `src/sections/`
+- **Pre-rendering**: `npm run build` also renders the page to HTML in Node (`src/entry-server.tsx` → `scripts/prerender.mjs`), so search engines, link previews and visitors without JavaScript get the full content. The browser then hydrates it (`src/main.tsx`). Anything that reads `window`, `document` or `navigator` must do it in an effect, an event handler, or a `useSyncExternalStore` with a server snapshot. See `useIsMac` and the Now strip clock
 - `src/index.css`: colour tokens for both themes (every text colour passes WCAG AA), entrance animations, wayfinder and X-ray styles
 - `src/theme.ts` + `index.html`: the theme is set before first paint, follows the system until you pick one, and the switch grows out of the toggle
 - `src/features/Wayfinder.tsx`: the ⌘K palette (native `<dialog>` + ARIA combobox) and the guided walk

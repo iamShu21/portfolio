@@ -29,11 +29,13 @@ function apply(t: Theme) {
   listeners.forEach((fn) => fn())
 }
 
-apply(getTheme()) // sync the theme-color meta with what the inline script chose
-
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-  if (!stored()) apply(e.matches ? 'dark' : 'light')
-})
+// Browser only (the page is also pre-rendered in Node at build time).
+if (typeof window !== 'undefined') {
+  apply(getTheme()) // sync the theme-color meta with what the inline script chose
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    if (!stored()) apply(e.matches ? 'dark' : 'light')
+  })
+}
 
 /**
  * Switch theme and remember the choice. With an origin point (the toggle's centre) and motion
