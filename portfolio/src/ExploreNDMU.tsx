@@ -196,49 +196,12 @@ export default function ExploreNDMU() {
 
       <Gallery />
 
-      <div className="mt-12">
-        <h3 className="font-medium">What it does</h3>
-        <ul className="mt-4 grid gap-x-8 gap-y-5 sm:grid-cols-2">
-          {e.features.map((f, i) => (
-            <Reveal as="li" key={f.title} className="flex gap-3">
-                <span aria-hidden className="font-mono text-xs leading-6 text-gold">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
-                <div>
-                  <p className="font-medium">{f.title}</p>
-                  <p className="mt-0.5 text-sm leading-relaxed text-muted">{f.body}</p>
-                </div>
-            </Reveal>
-          ))}
-        </ul>
-      </div>
-
       <div id="how-it-works" className="mt-12 scroll-mt-20">
         <h3 className="font-medium">How it works</h3>
         <p className="mt-1 leading-relaxed text-muted">
           The hard work happens before the app is installed. Routes are built once from real walks, and the phone only follows them, so a walk never needs the internet.
         </p>
         <RouteMap />
-        <div className="mt-6 grid gap-4 sm:grid-cols-2">
-          {e.how.map((lane) => (
-            <Reveal key={lane.title} className="rounded-2xl border border-line bg-card p-5">
-              <h4 className="font-mono text-xs text-gold">{lane.title.toLowerCase()}</h4>
-              <ol className="mt-3 space-y-4">
-                {lane.steps.map((s, i) => (
-                  <li key={s.t} className="grid grid-cols-[1.5rem_1fr] gap-3">
-                    <span aria-hidden className="grid h-6 w-6 place-items-center rounded-full bg-gold font-mono text-xs text-bg">
-                      {i + 1}
-                    </span>
-                    <div>
-                      <p className="text-sm font-medium">{s.t}</p>
-                      <p className="mt-0.5 text-sm leading-relaxed text-muted">{s.d}</p>
-                    </div>
-                  </li>
-                ))}
-              </ol>
-            </Reveal>
-          ))}
-        </div>
         <ul className="mt-6 grid gap-5 sm:grid-cols-3">
           {e.notes.map((n) => (
             <Reveal as="li" key={n.t} className="border-t border-gold pt-3">

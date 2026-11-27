@@ -4,7 +4,7 @@ export const profile = {
   name: 'Shuhari Alaihim Amoran',
   role: 'Full-Stack Developer',
   tagline: 'I build things that work on screens, in 3D, and in the real world.',
-  bio: 'An IT student at Notre Dame of Marbel University who builds full-stack web apps, desktop systems and, with my capstone team, an AR guide for our campus. I like owning a feature from the database to the last pixel.',
+  bio: 'IT student at Notre Dame of Marbel University. I build full-stack web apps and desktop systems, and with my capstone team I built an AR guide for our campus. I like owning a feature from the database to the last pixel.',
   location: 'Koronadal City, Philippines',
   /** Short availability line shown in the hero with a green dot. Empty hides it. */
   status: 'Open to internships',
@@ -159,32 +159,6 @@ export const explorendmu = {
     { file: 'tour-stop', title: 'Narrated campus tour', caption: 'Stop 6 of 8. A gold pin marks each stop and the voice introduces it.', alt: 'App screen: a gold AR pin over the floor at the Business Office, stop 6 of 8 of the campus tour', w: 540, h: 864 },
     { file: 'scan-champagnat', title: 'AR marker models', caption: 'Point the camera at a printed marker and a 3D statue stands on it.', alt: 'App screen: a 3D statue of St. Marcellin Champagnat standing on a printed marker on a desk', w: 540, h: 864 },
   ] satisfies Shot[],
-  features: [
-    { title: 'AR arrows on real routes', body: 'Arrows are placed on paths the team walked and recorded, not guessed from a map.' },
-    { title: 'A voice for every turn', body: 'Turn left, turn right and you have arrived are spoken, so you can keep your eyes up.' },
-    { title: 'Narrated campus tour', body: 'A guided walk from your gate through the main stops, with a pin and an introduction at each.' },
-    { title: 'Building directory', body: '42 places with photos, schedules and services, each linked to its route.' },
-    { title: 'AR marker models', body: 'Three campus statues appear as 3D models on printed markers.' },
-    { title: 'Works with no signal', body: 'Routes, place cards and voice lines live on the phone. Nothing is downloaded mid-walk.' },
-  ],
-  how: [
-    {
-      title: 'Once, before the app ships',
-      steps: [
-        { t: 'Walk the real paths', d: 'The team walked the campus with NDMU Walker, a recorder app built for the project that logs GPS and the AR camera’s path.' },
-        { t: 'Join the walks', d: 'A desktop tool joins the walks at marked doors and junctions, then finds the shortest way between any two places with Dijkstra’s algorithm.' },
-        { t: 'Pack it in', d: 'Routes, place cards and voice lines are saved as files inside the app.' },
-      ],
-    },
-    {
-      title: 'Every walk, on the phone',
-      steps: [
-        { t: 'Find the start', d: 'GPS gives the starting point; the app averages several fixes and won’t start more than 20 m from the route.' },
-        { t: 'Lead the way', d: 'Google ARCore tracks each step through the camera. Your position is matched to the route and arrows are placed on the walkway ahead.' },
-        { t: 'Arrive', d: 'A gold pin marks the place, the voice says you have arrived, and the place card opens.' },
-      ],
-    },
-  ],
   notes: [
     { t: 'A start that waits for a good fix', d: 'GPS on campus drifts by metres, so accurate fixes are trusted more than poor ones.' },
     { t: 'Tested at a desk first', d: 'A simulated walker follows each route at walking pace with GPS noise, so the logic is checked before anyone steps outside.' },
