@@ -3,6 +3,7 @@ import ExploreNDMU from './ExploreNDMU'
 import Header from './sections/Header'
 import Hero from './sections/Hero'
 import Projects from './sections/Projects'
+import Journey from './sections/Journey'
 import Stack from './sections/Stack'
 import Contact from './sections/Contact'
 import Footer from './sections/Footer'
@@ -15,6 +16,7 @@ export default function App() {
         <Hero />
         <Projects />
         <ExploreNDMU />
+        <Journey />
         <Stack />
         <Contact />
       </main>

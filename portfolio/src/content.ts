@@ -184,3 +184,37 @@ export const skills = {
     blurb: 'React Three Fiber: shaders, scissor views and keeping 3D at 60 fps on phones.',
   },
 }
+
+/* ---------- Journey (from the CV) ---------- */
+
+export type Milestone = {
+  /** Shown as written, e.g. '2023 – now'. */
+  years: string
+  /** Start year, used for sorting. */
+  from: number
+  kind: 'education' | 'activity'
+  title: string
+  org: string
+  note?: string
+  /** Still ongoing: gets the live dot. */
+  current?: boolean
+}
+
+export const journey: Milestone[] = [
+  {
+    years: '2023 – now',
+    from: 2023,
+    kind: 'education',
+    title: 'BS Information Technology',
+    org: 'Notre Dame of Marbel University',
+    note: 'Capstone: ExploreNDMU, an AR campus navigation app (2026).',
+    current: true,
+  },
+  { years: '2025 – 2026', from: 2025, kind: 'activity', title: 'Batch Representative', org: 'PSITS, NDMU', note: 'Philippine Society of Information Technology Students.' },
+  { years: '2024 – 2025', from: 2024, kind: 'activity', title: 'Auditor', org: 'PSITS, NDMU' },
+  { years: '2024 – 2025', from: 2024, kind: 'activity', title: 'Representative', org: 'Muslim Students Organization, NDMU' },
+  { years: '2023 – 2024', from: 2023, kind: 'activity', title: 'Batch Representative', org: 'PSITS, NDMU' },
+  { years: '2021 – 2023', from: 2021, kind: 'education', title: 'Senior High School, STEM strand', org: 'Notre Dame of Esperanza Inc.' },
+  { years: '2017 – 2021', from: 2017, kind: 'education', title: 'Junior High School', org: 'Notre Dame of Esperanza Inc.' },
+  { years: '2010 – 2017', from: 2010, kind: 'education', title: 'Primary', org: 'Esperanza Elementary School' },
+]

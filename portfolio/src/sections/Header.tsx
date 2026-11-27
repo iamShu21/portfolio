@@ -4,6 +4,7 @@ import ThemeToggle from '../features/ThemeToggle'
 const NAV = [
   { id: 'projects', label: 'projects' },
   { id: 'explorendmu', label: 'case study' },
+  { id: 'journey', label: 'journey' },
   { id: 'stack', label: 'stack' },
   { id: 'contact', label: 'contact' },
 ]
