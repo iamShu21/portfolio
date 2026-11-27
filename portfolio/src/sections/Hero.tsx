@@ -5,6 +5,7 @@ import { Rise } from '../ui'
 import { button } from '../lib/styles'
 import { cn } from '../lib/utils'
 import NowStrip from '../features/NowStrip'
+import { OPEN_AR } from '../events'
 
 const BASE = import.meta.env.BASE_URL
 
@@ -104,6 +105,16 @@ export default function Hero() {
             View CV <span aria-hidden>→</span>
           </CvLink>
         )}
+        <button
+            type="button"
+            onClick={() => window.dispatchEvent(new Event(OPEN_AR))}
+            className={cn(button.base, 'border border-gold/60 text-gold hover:bg-gold hover:text-bg')}
+          >
+            <svg aria-hidden viewBox="0 0 24 24" className="h-3.5 w-3.5">
+              <path d="M12 19V5M6 11l6-6 6 6" fill="none" stroke="currentColor" strokeWidth={2.6} strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            try my AR arrows
+          </button>
         <Socials />
       </Rise>
 

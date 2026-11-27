@@ -5,3 +5,6 @@ export const OPEN_CV = 'cv:open'
 
 /** Event: open the "Where to?" wayfinder (⌘K). */
 export const OPEN_WAYFINDER = 'wayfinder:open'
+
+/** Event: open the AR walk ("Walk to NDMU"). */
+export const OPEN_AR = 'ar:open'

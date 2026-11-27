@@ -9,6 +9,7 @@ import Contact from './sections/Contact'
 import Footer from './sections/Footer'
 import Wayfinder from './features/Wayfinder'
 import Xray from './features/Xray'
+import ArWalk from './features/ArWalk'
 
 export default function App() {
   return (
@@ -26,6 +27,7 @@ export default function App() {
       <CvDialog />
       <Wayfinder />
       <Xray />
+      <ArWalk />
     </>
   )
 }

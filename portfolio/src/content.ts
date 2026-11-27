@@ -272,3 +272,12 @@ export const answers = [
     a: 'React 19, Tailwind CSS 4 and Vite, with no UI kit and no animation library: native <dialog>, CSS scroll-driven animations and SVG. Press X (or pick x-ray here) to see how each part is built and what the page cost your browser.',
   },
 ]
+
+/* ---------- AR walk ("Walk to NDMU") ---------- */
+
+/** Where the AR arrows point. Coordinates from OpenStreetMap; the campus is about 400 m across. */
+export const ar = {
+  target: { lat: 6.4955421, lon: 124.8412859, name: 'Notre Dame of Marbel University', short: 'NDMU' },
+  /** Closer than this counts as "You have arrived". */
+  arriveKm: 0.3,
+}

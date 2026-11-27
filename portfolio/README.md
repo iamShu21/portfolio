@@ -1,8 +1,9 @@
 # Shuhari Alaihim Amoran: portfolio
 
-A calm, single-column portfolio with a light and dark theme, numbered sections, and an ExploreNDMU case study. It has three extras:
+A calm, single-column portfolio with a light and dark theme, numbered sections, and an ExploreNDMU case study. It has four extras:
 
 - **Where to? (⌘K / Ctrl+K, or `/`)**: a command palette framed like ExploreNDMU's "Navigate here". Pick a section and the page walks you there with gold arrows and a metre countdown, then says "You have arrived". It also runs actions such as copying the email or opening the CV, and answers common questions.
+- **Walk to NDMU (AR)**: on a phone, the camera shows your floor with gold arrows on it, pointing at the real NDMU campus from wherever you are, with spoken turns. On campus it says "You have arrived".
 - **Now strip**: your local time in Koronadal with a guess at what you're doing, what you're learning, and your latest public GitHub push.
 - **X-ray mode (X)**: outlines each part of the page with a note on how it's built, plus live numbers for what the page cost the browser.
 
@@ -41,6 +42,7 @@ The published copy leaves out the phone number, birth date and home address. Kee
 - `src/theme.ts` + `index.html`: the theme is set before first paint, follows the system until you pick one, and the switch grows out of the toggle
 - `src/features/Wayfinder.tsx`: the ⌘K palette (native `<dialog>` + ARIA combobox) and the guided walk
 - `src/features/NowStrip.tsx`: the clock and the latest push. The push comes from `virtual:latest-push`, a plugin in `vite.config.ts` that calls the GitHub API **once per build**, so visitors never do
+- `src/features/ArWalk.tsx` + `arDraw.ts` + `src/lib/geo.ts`: **Walk to NDMU**. ExploreNDMU's gold arrows run in the visitor's browser and point to the real campus (`ar.target` in content.ts) from wherever they are. On phones it uses the camera, compass and GPS, and the app's voice speaks the turns (Web Speech). On laptops it falls back to a floor grid that you turn by dragging or with ← →. Nothing leaves the device
 - `src/features/RouteMap.tsx`: the 60 surveyed campus walks as SVG, with chevrons walking the featured route
 - `src/features/Xray.tsx` + `src/xray.ts`: X-ray mode. Add a `data-xray="Name · how it's built"` attribute to any element to label it
 - `src/ExploreNDMU.tsx`: the case study (gallery with clip dialog, features, how it works)

@@ -1,6 +1,6 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { answers, profile } from '../content'
-import { OPEN_CV, OPEN_WAYFINDER } from '../events'
+import { OPEN_AR, OPEN_CV, OPEN_WAYFINDER } from '../events'
 import { lockScroll } from '../scroll'
 import { getTheme, toggleTheme } from '../theme'
 import { isXray, toggleXray } from '../xray'
@@ -54,6 +54,13 @@ function buildItems(): Item[] {
       keywords: 'mail contact clipboard',
       run: () => navigator.clipboard.writeText(profile.email).then(() => 'Email copied'),
     })
+  items.push({
+    kind: 'do',
+    id: 'do-ar',
+    label: 'walk to NDMU in AR',
+    keywords: 'try arrows camera compass demo explorendmu augmented reality',
+    run: () => void window.dispatchEvent(new Event(OPEN_AR)),
+  })
   if (profile.cv) items.push({ kind: 'do', id: 'do-cv', label: 'open CV', keywords: 'resume curriculum vitae pdf', run: () => void window.dispatchEvent(new Event(OPEN_CV)) })
   if (profile.github) items.push({ kind: 'do', id: 'do-gh', label: 'open GitHub', keywords: 'code repos', run: link(profile.github) })
   if (profile.linkedin) items.push({ kind: 'do', id: 'do-li', label: 'open LinkedIn', keywords: 'social', run: link(profile.linkedin) })
