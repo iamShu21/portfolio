@@ -142,7 +142,7 @@ function Gallery() {
 
 export default function ExploreNDMU() {
   return (
-    <Section id="explorendmu" n="02" title="case study" xray="ExploreNDMU · copy and numbers from content.ts">
+    <Section id="explorendmu" n="03" title="case study" xray="ExploreNDMU · copy and numbers from content.ts">
       <Reveal>
         <p className="text-4xl font-semibold tracking-tight sm:text-5xl">
           Explore<span className="text-gold">NDMU</span>

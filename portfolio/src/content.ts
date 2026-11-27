@@ -27,6 +27,22 @@ export const profile = {
   } | null,
 }
 
+/** The About section. A draft from the CV and the repos: make it sound like you. */
+export const about = {
+  paragraphs: [
+    "I'm Shuhari, an Information Technology student at Notre Dame of Marbel University in Koronadal City. I like the whole path of an app: the database tables, the API in the middle, and the screen someone actually taps.",
+    'So far that has meant a payment portal where students pay their school fees through GCash, Maya or card, a point-of-sale system for the desktop in Java, and, with my capstone team, an AR guide that walks people across our campus.',
+    "Outside class I've held a student-org role every year since 2023: batch representative and auditor for PSITS, and representative for the Muslim Students Organization.",
+    "Right now I'm looking for an internship where I can ship real features for real users, on the web or on mobile.",
+  ],
+  facts: [
+    { k: 'studying', v: 'BS Information Technology, NDMU, 2023 to now' },
+    { k: 'based in', v: 'Koronadal City, Philippines (UTC+8)' },
+    { k: 'builds', v: 'Web apps, desktop systems, mobile and AR' },
+    { k: 'looking for', v: 'An internship, web or mobile' },
+  ],
+}
+
 export type Project = {
   title: string
   kind: string
@@ -270,6 +286,11 @@ export const answers = [
     q: 'Where are you based?',
     keywords: 'location city country timezone',
     a: 'Koronadal City, Philippines. That is UTC+8, the time in the strip at the top of the page.',
+  },
+  {
+    q: 'What have you built?',
+    keywords: 'projects work portfolio apps',
+    a: 'Three projects so far: SSG Payment System, a full-stack payment portal (React, Express, MySQL, PayMongo); a point-of-sale desktop app in Java with MySQL; and ExploreNDMU, our capstone AR campus guide for Android. All three are in the projects section.',
   },
   {
     q: 'What is ExploreNDMU?',

@@ -38,7 +38,8 @@ function buildItems(): Item[] {
   const link = (href: string) => () => void window.open(href, '_blank', 'noopener')
   const items: Item[] = [
     go('top', 'home', 'top start hero about'),
-    go('projects', 'projects', 'work portfolio'),
+    go('about', 'about me', 'who bio background story'),
+    go('projects', 'projects', 'work portfolio ssg payment pos point of sale'),
     go('explorendmu', 'ExploreNDMU case study', 'ar app capstone'),
     go('screens', 'ExploreNDMU screens', 'gallery video clips screenshots'),
     go('how-it-works', 'how ExploreNDMU works', 'map routes dijkstra gps arcore'),

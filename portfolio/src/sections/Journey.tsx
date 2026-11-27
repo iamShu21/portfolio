@@ -14,7 +14,7 @@ export default function Journey() {
   const items = journey.filter((m) => filter === 'all' || m.kind === filter)
 
   return (
-    <Section id="journey" n="03" title="journey" xray="Journey · toggle buttons with aria-pressed, data from the CV">
+    <Section id="journey" n="04" title="journey" xray="Journey · toggle buttons with aria-pressed, data from the CV">
       <div role="group" aria-label="Filter the timeline" className="mb-6 inline-flex rounded-full border border-line bg-card p-1">
         {FILTERS.map((f) => (
           <button

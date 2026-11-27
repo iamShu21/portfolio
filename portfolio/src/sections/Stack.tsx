@@ -5,7 +5,7 @@ const GROUPS = [skills.frontend, skills.xr, skills.backend, skills.shipping]
 
 export default function Stack() {
   return (
-    <Section id="stack" n="04" title="stack" xray="Stack · plain lists, no marquee to wait for">
+    <Section id="stack" n="05" title="stack" xray="Stack · plain lists, no marquee to wait for">
       <div className="grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2">
         {GROUPS.map((g) => (
           <Reveal key={g.title} className="bg-card p-5">

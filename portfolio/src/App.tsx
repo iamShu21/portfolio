@@ -2,6 +2,7 @@ import { CvDialog } from './Cv'
 import ExploreNDMU from './ExploreNDMU'
 import Header from './sections/Header'
 import Hero from './sections/Hero'
+import About from './sections/About'
 import Projects from './sections/Projects'
 import Journey from './sections/Journey'
 import Stack from './sections/Stack'
@@ -19,6 +20,7 @@ export default function App() {
       <PageMap />
       <main id="main" tabIndex={-1} className="mx-auto max-w-2xl px-4 sm:px-6">
         <Hero />
+        <About />
         <Projects />
         <ExploreNDMU />
         <Journey />

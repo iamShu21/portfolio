@@ -10,6 +10,7 @@ import { cn } from '../lib/utils'
 
 const PLACES = [
   { id: 'top', label: 'home' },
+  { id: 'about', label: 'about' },
   { id: 'projects', label: 'projects' },
   { id: 'explorendmu', label: 'case study' },
   { id: 'journey', label: 'journey' },
@@ -20,11 +21,12 @@ const PLACES = [
 // A meandering route through the places (x, y in the SVG's 70 × 330 box).
 const PTS: [number, number][] = [
   [14, 12],
-  [52, 72],
-  [20, 136],
-  [56, 200],
-  [22, 262],
-  [46, 320],
+  [50, 62],
+  [20, 114],
+  [56, 166],
+  [24, 218],
+  [54, 270],
+  [30, 320],
 ]
 
 /** A smooth path through the points (Catmull-Rom turned into cubic Béziers). */

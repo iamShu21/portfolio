@@ -57,7 +57,7 @@ function ProjectCard({ p }: { p: Project }) {
 
 export default function Projects() {
   return (
-    <Section id="projects" n="01" title="projects" xray="Projects · drafts in content.ts stay hidden">
+    <Section id="projects" n="02" title="projects" xray="Projects · drafts in content.ts stay hidden">
       <div className="grid gap-5">
         {projects
           .filter((p) => !p.draft)

@@ -19,7 +19,7 @@ export default function Contact() {
   }
 
   return (
-    <Section id="contact" n="05" title="contact" xray="Contact · clipboard API, mailto fallback, aria-live">
+    <Section id="contact" n="06" title="contact" xray="Contact · clipboard API, mailto fallback, aria-live">
       <Reveal>
         <p className="text-3xl font-semibold tracking-tight sm:text-4xl">say hello.</p>
         <p className="mt-3 max-w-lg leading-relaxed text-muted">

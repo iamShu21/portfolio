@@ -4,6 +4,7 @@ import { OPEN_WAYFINDER } from '../events'
 import { useIsMac } from '../lib/platform'
 
 const NAV = [
+  { id: 'about', label: 'about' },
   { id: 'projects', label: 'projects' },
   { id: 'journey', label: 'journey' },
   { id: 'stack', label: 'stack' },
