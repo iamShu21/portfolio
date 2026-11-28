@@ -67,7 +67,7 @@ If the request fails, the build still succeeds and the "pushed" line is simply h
 ### Link previews
 
 `public/og.jpg` (1200×630) is the image shown when the link is shared. Link previews need its full URL, and a build plugin in `vite.config.ts` adds the tags.
-On Vercel the project sets `SITE_URL=https://shuhari-dev.vercel.app` (Settings → Environment Variables). Without it, the build falls back to Vercel's production domain. Anywhere else, build with `SITE_URL` set to the site's public address, for example `SITE_URL=https://iamshu21.github.io/portfolio`.
+On Vercel the project sets `SITE_URL=https://shuhari-portfolio.vercel.app` (Settings → Environment Variables). Without it, the build falls back to Vercel's production domain. Anywhere else, build with `SITE_URL` set to the site's public address, for example `SITE_URL=https://iamshu21.github.io/portfolio`.
 If you change the hero, make a new 1200×630 image to match.
 
 ### GitHub Pages
