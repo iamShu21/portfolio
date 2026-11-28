@@ -12,12 +12,14 @@ import Wayfinder from './features/Wayfinder'
 import Xray from './features/Xray'
 import ArWalk from './features/ArWalk'
 import PageMap from './features/PageMap'
+import QuickContact from './features/QuickContact'
 
 export default function App() {
   return (
     <>
       <Header />
       <PageMap />
+      <QuickContact />
       <main id="main" tabIndex={-1} className="mx-auto max-w-2xl px-4 sm:px-6">
         <Hero />
         <About />
