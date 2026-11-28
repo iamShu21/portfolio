@@ -36,7 +36,7 @@ function socialMeta(): Plugin {
         meta('property', 'og:image', url('og.jpg')),
         meta('property', 'og:image:width', '1200'),
         meta('property', 'og:image:height', '630'),
-        meta('property', 'og:image:alt', 'Shuhari Alaihim Amoran, full-stack developer for web, mobile and AR, next to a map of campus walking routes with one route highlighted in gold'),
+        meta('property', 'og:image:alt', 'Shuhari Alaihim Amoran, aspiring software developer, next to a map of campus walking routes with one route highlighted in gold'),
         meta('name', 'twitter:card', 'summary_large_image'),
       ]
       if (site) {

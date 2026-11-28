@@ -4,7 +4,7 @@ A calm, single-column portfolio with a light and dark theme, numbered sections, 
 
 - **Where to? (⌘K / Ctrl+K, or `/`)**: a command palette framed like ExploreNDMU's "Navigate here". Pick a section and the page walks you there with gold arrows and a metre countdown, then says "You have arrived". It also runs actions such as copying the email or opening the CV, and answers common questions.
 - **Walk to NDMU (AR)**: on a phone, the camera shows your floor with gold arrows on it, pointing at the real NDMU campus from wherever you are, with spoken turns. On campus it says "You have arrived".
-- **Now strip**: your local time in Koronadal with a guess at what you're doing, what you're learning, and your latest public GitHub push.
+- **Now strip**: your local time in Esperanza with a guess at what you're doing, what you're learning, and your latest public GitHub push.
 - **X-ray mode (X)**: outlines each part of the page with a note on how it's built, plus live numbers for what the page cost the browser.
 
 Built with Vite, React 19, TypeScript and Tailwind CSS v4. Beyond React it adds no UI kit and no animation library: it uses native `<dialog>`, CSS scroll-driven animations, SVG/SMIL and the View Transitions API.

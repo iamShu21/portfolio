@@ -320,7 +320,7 @@ export default function Wayfinder() {
               </div>
             ) : (
               <div id={`${uid}-list`} role="listbox" aria-label="Destinations, actions and questions" className="max-h-[min(55vh,26rem)] overflow-y-auto p-2">
-                {shown.length === 0 && <p className="px-3 py-6 text-center text-sm text-muted">No match. Try “contact”, “cv” or “internship”.</p>}
+                {shown.length === 0 && <p className="px-3 py-6 text-center text-sm text-muted">No match. Try “contact”, “cv” or “commission”.</p>}
                 {GROUPS.map((g) => {
                   const group = shown.filter((it) => it.kind === g.kind)
                   if (!group.length) return null

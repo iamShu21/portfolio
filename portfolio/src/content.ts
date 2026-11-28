@@ -2,12 +2,13 @@
 
 export const profile = {
   name: 'Shuhari Alaihim Amoran',
-  role: 'Full-Stack Developer',
+  role: 'Aspiring Software Developer',
   tagline: 'I build things that work on screens, in 3D, and in the real world.',
   bio: 'IT student at Notre Dame of Marbel University. I build full-stack web apps and desktop systems, and with my capstone team I built an AR guide for our campus. I like owning a feature from the database to the last pixel.',
-  location: 'Koronadal City, Philippines',
+  /** Where you live. (School is in Koronadal City; that's on the education entry.) */
+  location: 'Esperanza, Sultan Kudarat, Philippines',
   /** Short availability line shown in the hero with a green dot. Empty hides it. */
-  status: 'Open to internships',
+  status: 'Open to commissions',
   /** A square photo in public/ (me.webp is cropped from the CV). Empty shows initials instead. */
   photo: 'me.webp',
   // Leave email, linkedin or facebook empty ('') to hide them on the page.
@@ -30,16 +31,16 @@ export const profile = {
 /** The About section. A draft from the CV and the repos: make it sound like you. */
 export const about = {
   paragraphs: [
-    "I'm Shuhari, an Information Technology student at Notre Dame of Marbel University in Koronadal City. I like the whole path of an app: the database tables, the API in the middle, and the screen someone actually taps.",
+    "I'm Shuhari, an aspiring software developer from Esperanza, Sultan Kudarat, studying Information Technology at Notre Dame of Marbel University in Koronadal City. I like the whole path of an app: the database tables, the API in the middle, and the screen someone actually taps.",
     'So far that has meant a payment portal where students pay their school fees through GCash, Maya or card, a point-of-sale system for the desktop in Java, and, with my capstone team, an AR guide that walks people across our campus.',
     "Outside class I've held a student-org role every year since 2023: batch representative and auditor for PSITS, and representative for the Muslim Students Organization.",
-    "Right now I'm looking for an internship where I can ship real features for real users, on the web or on mobile.",
+    "I'm open to commissions: if you need a web app, a desktop system or a tool for your school, organisation or business, I'd like to hear about it.",
   ],
   facts: [
     { k: 'studying', v: 'BS Information Technology, NDMU, 2023 to now' },
-    { k: 'based in', v: 'Koronadal City, Philippines (UTC+8)' },
+    { k: 'lives in', v: 'Esperanza, Sultan Kudarat (UTC+8)' },
     { k: 'builds', v: 'Web apps, desktop systems, mobile and AR' },
-    { k: 'looking for', v: 'An internship, web or mobile' },
+    { k: 'open to', v: 'Commissions: web apps and desktop systems' },
   ],
 }
 
@@ -259,7 +260,7 @@ export const leadership: Org[] = [
 
 export const now = {
   timeZone: 'Asia/Manila',
-  city: 'Koronadal',
+  city: 'Esperanza',
   learning: 'React Three Fiber shaders',
   /** What you're probably doing, by local hour. Each entry starts at `from` (0–23). */
   moods: [
@@ -278,14 +279,14 @@ export const now = {
 /** Canned answers. `keywords` help the search find them. Keep answers short and true. */
 export const answers = [
   {
-    q: 'Are you open to internships?',
-    keywords: 'job hire work intern available ojt',
-    a: `Yes. I'm a BS Information Technology student at Notre Dame of Marbel University, looking for internships in web, mobile or AR development. Email is the fastest way to reach me: ${profile.email}.`,
+    q: 'Are you open to commissions?',
+    keywords: 'hire freelance commission work project job available client',
+    a: `Yes. I take commissions for web apps, desktop systems and similar projects. Tell me what you need and when you need it; email is the fastest way to reach me: ${profile.email}.`,
   },
   {
     q: 'Where are you based?',
     keywords: 'location city country timezone',
-    a: 'Koronadal City, Philippines. That is UTC+8, the time in the strip at the top of the page.',
+    a: 'I live in Esperanza, Sultan Kudarat, and study at Notre Dame of Marbel University in Koronadal City. Both are on Philippine time (UTC+8), the clock in the strip at the top of the page.',
   },
   {
     q: 'What have you built?',

@@ -23,7 +23,7 @@ export default function Contact() {
       <Reveal>
         <p className="text-3xl font-semibold tracking-tight sm:text-4xl">say hello.</p>
         <p className="mt-3 max-w-lg leading-relaxed text-muted">
-          Internships, freelance work, a project that needs a map and a phone, or just a question about ExploreNDMU. I read everything.
+          Commissions, collaborations, or just a question about one of my projects. Tell me what you need and when; I read everything.
         </p>
       </Reveal>
       <Reveal className="mt-6">
