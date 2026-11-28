@@ -5,7 +5,7 @@ const BASE = import.meta.env.BASE_URL
 
 function ProjectCard({ p }: { p: Project }) {
   return (
-    <article className="group overflow-hidden rounded-2xl border border-line bg-card transition-colors hover:border-accent/50">
+    <article data-tech={p.tags.join('|')} data-tech-label={p.title} className="group overflow-hidden rounded-2xl border border-line bg-card transition-colors hover:border-accent/50">
       {p.image && (
         <div className="overflow-hidden border-b border-line">
           <img

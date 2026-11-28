@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { explorendmu as e, type Shot } from './content'
+import { explorendmu as e, projects, type Shot } from './content'
 import { Reveal, Section, TextLink } from './ui'
 import { lockScroll } from './scroll'
 import { useReducedMotion } from './motion'
@@ -140,6 +140,8 @@ function Gallery() {
 export default function ExploreNDMU() {
   return (
     <Section id="explorendmu" n="03" title="case study" xray="ExploreNDMU · copy and numbers from content.ts">
+      {/* Lights up the tools in the right margin (TechInView) while the case study is read. */}
+      <div data-tech={projects.find((p) => p.title === 'ExploreNDMU')?.tags.join('|')} data-tech-label="ExploreNDMU case study">
       <Reveal>
         <p className="text-4xl font-semibold tracking-tight sm:text-5xl">
           Explore<span className="text-gold">NDMU</span>
@@ -187,6 +189,7 @@ export default function ExploreNDMU() {
             </Reveal>
           ))}
         </ul>
+      </div>
       </div>
     </Section>
   )

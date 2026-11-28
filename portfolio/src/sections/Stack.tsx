@@ -9,6 +9,7 @@ export default function Stack() {
       <div className="grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2">
         {GROUPS.map((g) => (
           <Reveal key={g.title} className="bg-card p-5">
+            <div data-tech={g.items.join('|')} data-tech-label={g.title}>
             <h3 className="font-medium">{g.title}</h3>
             <p className="mt-1 text-sm leading-relaxed text-muted">{g.blurb}</p>
             <ul className="mt-4 flex flex-wrap gap-1.5">
@@ -18,6 +19,7 @@ export default function Stack() {
                 </li>
               ))}
             </ul>
+            </div>
           </Reveal>
         ))}
       </div>
