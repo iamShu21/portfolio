@@ -37,7 +37,7 @@ function buildItems(): Item[] {
   const go = (target: string, label: string, keywords = ''): Item => ({ kind: 'go', id: 'go-' + target, label, keywords, target })
   const link = (href: string) => () => void window.open(href, '_blank', 'noopener')
   const items: Item[] = [
-    go('top', 'home', 'top start hero about'),
+    go('top', 'home', 'top start hero intro'),
     go('about', 'about me', 'who bio background story'),
     go('projects', 'projects', 'work portfolio ssg payment pos point of sale'),
     go('explorendmu', 'ExploreNDMU case study', 'ar app capstone'),
@@ -84,13 +84,25 @@ function buildItems(): Item[] {
   return items
 }
 
-function matches(it: Item, q: string) {
-  const hay = `${it.label} ${it.keywords ?? ''}`.toLowerCase()
-  return q
-    .toLowerCase()
-    .split(/\s+/)
-    .filter(Boolean)
-    .every((w) => hay.includes(w))
+/**
+ * How well an item fits the query: 0 = no match. Every word must appear in the label or the
+ * keywords; matches in the label itself rank above keyword-only matches, so typing "about me"
+ * picks "about me", not an item that merely lists "about" as a keyword.
+ */
+function score(it: Item, q: string) {
+  const words = q.toLowerCase().split(/\s+/).filter(Boolean)
+  if (!words.length) return 1
+  const label = it.label.toLowerCase()
+  const hay = `${label} ${it.keywords ?? ''}`.toLowerCase()
+  if (!words.every((w) => hay.includes(w))) return 0
+  const phrase = words.join(' ')
+  const labelWords = label.split(/[^a-z0-9]+/)
+  if (label === phrase) return 5
+  // Whole words beat word starts: "ar" means the AR walk, not "Are you…".
+  if (words.every((w) => labelWords.includes(w))) return 4
+  if (label.startsWith(phrase)) return 3
+  if (words.every((w) => label.includes(w))) return 2
+  return 1
 }
 
 /* ---------- the walk ---------- */
@@ -166,7 +178,13 @@ export default function Wayfinder() {
 
   // Rebuilt on every open, so labels like "switch to dark theme" are current.
   const items = useMemo(() => (open ? buildItems() : []), [open])
-  const shown = items.filter((it) => matches(it, query))
+  // Groups keep their kind, but the best-matching group comes first and items within a group
+  // are ranked, so the highlighted first option is always the best match. `shown` is the same
+  // order as on screen, which keeps the arrow keys in step with what you see.
+  const scored = items.map((it) => ({ it, s: score(it, query) })).filter((x) => x.s > 0)
+  const groups = GROUPS.map((g) => ({ ...g, list: scored.filter((x) => x.it.kind === g.kind).sort((a, b) => b.s - a.s) })).filter((g) => g.list.length)
+  if (query.trim()) groups.sort((a, b) => b.list[0].s - a.list[0].s)
+  const shown = groups.flatMap((g) => g.list.map((x) => x.it))
   const current = shown[Math.min(active, shown.length - 1)]
 
   // Open on ⌘K / Ctrl+K anywhere, "/" when not typing, or the header button's event.
@@ -321,9 +339,8 @@ export default function Wayfinder() {
             ) : (
               <div id={`${uid}-list`} role="listbox" aria-label="Destinations, actions and questions" className="max-h-[min(55vh,26rem)] overflow-y-auto p-2">
                 {shown.length === 0 && <p className="px-3 py-6 text-center text-sm text-muted">No match. Try “contact”, “cv” or “commission”.</p>}
-                {GROUPS.map((g) => {
-                  const group = shown.filter((it) => it.kind === g.kind)
-                  if (!group.length) return null
+                {groups.map((g) => {
+                  const group = g.list.map((x) => x.it)
                   return (
                     <div key={g.kind} role="group" aria-labelledby={`${uid}-g-${g.kind}`} className="mb-1 last:mb-0">
                       <p id={`${uid}-g-${g.kind}`} className="px-3 pb-1 pt-2 font-mono text-[0.7rem] text-muted">

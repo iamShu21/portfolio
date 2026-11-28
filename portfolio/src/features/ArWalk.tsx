@@ -60,6 +60,10 @@ export default function ArWalk() {
   const [mode, setMode] = useState<'sensors' | 'drag' | null>(null)
   const [hud, setHud] = useState({ instruction: 'Follow the arrows', phi: 0 })
   const [voice, setVoice] = useState(true)
+  /** Set when the visitor picked a starting town instead of sharing their location. */
+  const [origin, setOrigin] = useState<string | null>(null)
+  /** Location hasn't answered for a while (some browsers never do on laptops). */
+  const [slow, setSlow] = useState(false)
 
   useEffect(() => {
     const onOpen = () => {
@@ -87,6 +91,8 @@ export default function ArWalk() {
       setLoc('pending')
       setFix(null)
       setMode(null)
+      setOrigin(null)
+      setSlow(false)
       lockScroll(false)
       if (d.open) d.close()
     }
@@ -170,6 +176,7 @@ export default function ArWalk() {
       const id = navigator.geolocation.watchPosition(
         (pos) => {
           setFix({ lat: pos.coords.latitude, lon: pos.coords.longitude })
+          setOrigin(null) // a real position beats a picked town
           setLoc('ok')
         },
         (err) => setLoc(err.code === err.PERMISSION_DENIED ? 'denied' : 'unavailable'),
@@ -177,6 +184,8 @@ export default function ArWalk() {
       )
       cleanups.current.push(() => navigator.geolocation.clearWatch(id))
     } else setLoc('unavailable')
+    const slowTimer = setTimeout(() => setSlow(true), 4000)
+    cleanups.current.push(() => clearTimeout(slowTimer))
 
     // The camera only on touch devices: on a laptop it would film you, not the floor.
     if (touch && navigator.mediaDevices?.getUserMedia) {
@@ -255,7 +264,7 @@ export default function ArWalk() {
   const detail = arrived
     ? `You're at ${ar.target.name}`
     : loc === 'ok' && km !== null && bearing !== null
-      ? `about ${formatDistance(km)} to ${ar.target.short} · ${compassPoint(bearing)}`
+      ? `about ${formatDistance(km)} to ${ar.target.short}${origin ? ` from ${origin}` : ''} · ${compassPoint(bearing)}`
       : loc === 'pending'
         ? 'Finding where you are…'
         : `Location is off, so the arrows can't find ${ar.target.short}`
@@ -347,6 +356,33 @@ export default function ArWalk() {
               </span>
             </div>
           </div>
+
+          {/* No location (blocked, or a browser without a location service): pick a starting town. */}
+          {loc !== 'ok' && (loc !== 'pending' || slow) && (
+            <div className="absolute inset-x-0 top-24 flex justify-center px-4">
+              <div className="max-w-sm rounded-2xl bg-[#0b0b10]/90 p-4 text-center shadow-2xl backdrop-blur">
+                <p className="text-sm">
+                  {loc === 'denied' ? 'Location is blocked in this browser.' : 'This browser can’t tell where you are.'} Start from:
+                </p>
+                <div className="mt-3 flex flex-wrap justify-center gap-2">
+                  {ar.starts.map((s) => (
+                    <button
+                      key={s.name}
+                      type="button"
+                      onClick={() => {
+                        setFix({ lat: s.lat, lon: s.lon })
+                        setOrigin(s.name)
+                        setLoc('ok')
+                      }}
+                      className="rounded-full border border-[#f5b301]/60 px-3 py-1.5 font-mono text-xs text-[#f5b301] transition hover:bg-[#f5b301] hover:text-[#0b0b10]"
+                    >
+                      {s.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="absolute inset-x-0 bottom-0 flex flex-wrap items-end justify-between gap-3 p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
             <p className="max-w-[60%] rounded-xl bg-[#0b0b10]/70 px-3 py-2 font-mono text-[0.7rem] leading-relaxed text-[#c9c9d1] backdrop-blur">

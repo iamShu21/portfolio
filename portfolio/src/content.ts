@@ -322,6 +322,16 @@ export const ar = {
   target: { lat: 6.4955421, lon: 124.8412859, name: 'Notre Dame of Marbel University', short: 'NDMU' },
   /** Closer than this counts as "You have arrived". */
   arriveKm: 0.3,
+  /**
+   * Starting points to pick when the browser can't tell where the visitor is (location blocked,
+   * or a laptop with no location service). Coordinates from OpenStreetMap.
+   */
+  starts: [
+    { name: 'Esperanza', lat: 6.7226, lon: 124.5206 },
+    { name: 'Manila', lat: 14.5904, lon: 120.9804 },
+    { name: 'Cebu City', lat: 10.2935, lon: 123.9018 },
+    { name: 'Davao City', lat: 7.0648, lon: 125.6081 },
+  ],
 }
 
 /* ---------- Hero stats (counted from the content above, so they stay true) ---------- */
