@@ -43,7 +43,7 @@ function buildItems(): Item[] {
     go('explorendmu', 'ExploreNDMU case study', 'ar app capstone'),
     go('screens', 'ExploreNDMU screens', 'gallery video clips screenshots'),
     go('how-it-works', 'how ExploreNDMU works', 'map routes dijkstra gps arcore'),
-    go('journey', 'journey', 'education school timeline experience orgs psits'),
+    go('journey', 'journey', 'education school timeline experience leadership orgs psits mso'),
     go('stack', 'stack', 'skills tech tools languages'),
     go('contact', 'contact', 'email hire say hello'),
   ]

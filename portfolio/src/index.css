@@ -198,3 +198,23 @@ html[data-xray-on] dialog[data-xray]::before {
   top: auto;
   bottom: 8px;
 }
+
+/* Journey timeline bars draw in from their start year while the chart enters the screen, and
+   are complete by the time it's fully in view. A clip, not a scale, so labels never squash. */
+@keyframes draw-x {
+  from {
+    clip-path: inset(0 100% 0 0 round 999px);
+  }
+  to {
+    clip-path: inset(0 0 0 0 round 999px);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .timeline-bar {
+      animation: draw-x linear both;
+      animation-timeline: view();
+      animation-range: entry 25% entry 100%;
+    }
+  }
+}

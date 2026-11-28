@@ -196,37 +196,63 @@ export const skills = {
 }
 
 /* ---------- Journey (from the CV) ---------- */
+// Years are school years: a role "2024 – 2025" runs from 2024 to 2025 on the timeline.
 
-export type Milestone = {
-  /** Shown as written, e.g. '2023 – now'. */
-  years: string
-  /** Start year, used for sorting. */
-  from: number
-  kind: 'education' | 'activity'
+export type School = {
   title: string
   org: string
-  note?: string
-  /** Still ongoing: gets the live dot. */
-  current?: boolean
+  from: number
+  /** null = still studying. */
+  to: number | null
+  detail?: string
+  /** Things worth knowing about this stretch, one line each. */
+  notes?: string[]
 }
 
-export const journey: Milestone[] = [
+export const education: School[] = [
   {
-    years: '2023 – now',
-    from: 2023,
-    kind: 'education',
     title: 'BS Information Technology',
     org: 'Notre Dame of Marbel University',
-    note: 'Capstone: ExploreNDMU, an AR campus navigation app (2026).',
-    current: true,
+    from: 2023,
+    to: null,
+    detail: 'Koronadal City',
+    notes: ['Capstone: ExploreNDMU, an AR campus navigation app (2026)', 'Class project: SSG Payment System, a fee portal with online checkout (2026)'],
   },
-  { years: '2025 – 2026', from: 2025, kind: 'activity', title: 'Batch Representative', org: 'PSITS, NDMU', note: 'Philippine Society of Information Technology Students.' },
-  { years: '2024 – 2025', from: 2024, kind: 'activity', title: 'Auditor', org: 'PSITS, NDMU' },
-  { years: '2024 – 2025', from: 2024, kind: 'activity', title: 'Representative', org: 'Muslim Students Organization, NDMU' },
-  { years: '2023 – 2024', from: 2023, kind: 'activity', title: 'Batch Representative', org: 'PSITS, NDMU' },
-  { years: '2021 – 2023', from: 2021, kind: 'education', title: 'Senior High School, STEM strand', org: 'Notre Dame of Esperanza Inc.' },
-  { years: '2017 – 2021', from: 2017, kind: 'education', title: 'Junior High School', org: 'Notre Dame of Esperanza Inc.' },
-  { years: '2010 – 2017', from: 2010, kind: 'education', title: 'Primary', org: 'Esperanza Elementary School' },
+  { title: 'Senior High School', org: 'Notre Dame of Esperanza Inc.', from: 2021, to: 2023, detail: 'STEM strand' },
+]
+
+/** Shown as one quiet line under Education. */
+export const earlierSchooling = [
+  { title: 'Junior high', org: 'Notre Dame of Esperanza Inc.', from: 2017, to: 2021 },
+  { title: 'Primary', org: 'Esperanza Elementary School', from: 2010, to: 2017 },
+]
+
+export type Org = {
+  /** Short name for the timeline lane. */
+  short: string
+  name: string
+  where: string
+  roles: { title: string; from: number; to: number }[]
+}
+
+/** Student organisations, roles oldest first. */
+export const leadership: Org[] = [
+  {
+    short: 'PSITS',
+    name: 'Philippine Society of Information Technology Students',
+    where: 'NDMU',
+    roles: [
+      { title: 'Batch Representative', from: 2023, to: 2024 },
+      { title: 'Auditor', from: 2024, to: 2025 },
+      { title: 'Batch Representative', from: 2025, to: 2026 },
+    ],
+  },
+  {
+    short: 'MSO',
+    name: 'Muslim Students Organization',
+    where: 'NDMU',
+    roles: [{ title: 'Representative', from: 2024, to: 2025 }],
+  },
 ]
 
 /* ---------- Now strip (hero) ---------- */
@@ -304,6 +330,6 @@ const tools = new Set(Object.values(skills).flatMap((g) => ('items' in g ? g.ite
 
 export const heroStats = [
   { n: String(shown.length), k: 'apps built: web, desktop, AR' },
-  { n: String(journey.filter((m) => m.kind === 'activity').length), k: 'student-org roles' },
+  { n: String(leadership.flatMap((o) => o.roles).length), k: 'student-org roles' },
   { n: `${tools.size}`, k: 'languages and tools' },
 ]

@@ -116,7 +116,11 @@ function latestPush(user: string): Plugin {
 
 export default defineConfig({
   base,
-  define: { __BUILD_YEAR__: JSON.stringify(new Date().getFullYear()) },
+  define: {
+    __BUILD_YEAR__: JSON.stringify(new Date().getFullYear()),
+    // e.g. 2026.83 in November: where "now" sits on the journey timeline.
+    __BUILD_DECIMAL_YEAR__: JSON.stringify(new Date().getFullYear() + new Date().getMonth() / 12),
+  },
   // The GitHub account whose public pushes the Now strip shows (same as profile.github).
   plugins: [react(), tailwindcss(), socialMeta(), latestPush('iamShu21')],
 })
