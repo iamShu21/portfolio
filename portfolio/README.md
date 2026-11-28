@@ -31,7 +31,7 @@ All text lives in `src/content.ts`:
 - the wayfinder's canned answers (`answers`)
 
 The case-study images and clips are in `public/projects/explorendmu/`. The campus route data is in `src/data/campus.json`.
-The CV (an image for the dialog and a PDF to download) is in `public/cv/`, and `profile.cv` in `content.ts` points to it.
+The CV (an image for the dialog and a PDF to download) is in `public/cv/`, and `profile.cv` in `content.ts` points to it. Both are made from `cv-source/cv.html` (two A4 pages). Edit that file, open it in Chrome, press Ctrl+P and choose Save as PDF with paper A4, margins None and Background graphics on. Then update the image too.
 The published copy leaves out the phone number, birth date and home address. Keep it that way when you swap in a new CV.
 
 ## How it's put together

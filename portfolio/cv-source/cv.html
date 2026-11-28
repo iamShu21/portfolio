@@ -1,0 +1,426 @@
+<!doctype html>
+<!--
+  Shuhari's CV: two A4 pages. To make the PDF: open this file in Chrome or Edge, press Ctrl+P,
+  choose "Save as PDF", paper A4, margins "None", and tick "Background graphics".
+  Keep the phone number, birth date and home address out of any copy you publish.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Shuhari Alaihim D. Amoran · CV</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=block" rel="stylesheet" />
+    <style>
+      @page {
+        size: A4;
+        margin: 0;
+      }
+      :root {
+        --ink: #18181b;
+        --muted: #55555d;
+        --line: #e2e2dc;
+        --gold: #a35f00;
+        --soft: #f6f5f1;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        background: #d9d9d4;
+      }
+      body {
+        font: 9.6pt/1.5 Geist, system-ui, sans-serif;
+        color: var(--ink);
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .page {
+        width: 210mm;
+        height: 297mm;
+        margin: 0 auto 8mm;
+        padding: 14mm 15mm 12mm;
+        background: #fff;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+      @media print {
+        html {
+          background: #fff;
+        }
+        .page {
+          margin: 0;
+          break-after: page;
+        }
+      }
+      .mono {
+        font-family: 'Geist Mono', ui-monospace, monospace;
+      }
+
+      /* Header */
+      header {
+        display: grid;
+        grid-template-columns: 30mm 1fr;
+        gap: 7mm;
+        align-items: center;
+        padding-bottom: 6mm;
+        border-bottom: 2px solid var(--ink);
+      }
+      header img {
+        width: 30mm;
+        height: 30mm;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 1px solid var(--line);
+      }
+      h1 {
+        font-size: 23pt;
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+        font-weight: 700;
+      }
+      .title {
+        margin-top: 1.5mm;
+        font-size: 12pt;
+        color: var(--gold);
+        font-weight: 600;
+      }
+      .contact {
+        margin-top: 3mm;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1mm 4.5mm;
+        font-size: 8.3pt;
+        color: var(--muted);
+      }
+      .contact b {
+        color: var(--ink);
+        font-weight: 500;
+      }
+
+      /* Sections: a label column on the left, content on the right */
+      section {
+        display: grid;
+        grid-template-columns: 31mm 1fr;
+        gap: 0 6mm;
+        padding-top: 5mm;
+      }
+      section > h2 {
+        font: 600 7.6pt/1.6 'Geist Mono', monospace;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--gold);
+        padding-top: 0.6mm;
+      }
+      .entry {
+        break-inside: avoid;
+      }
+      .entry + .entry {
+        margin-top: 3.6mm;
+      }
+      .row {
+        display: flex;
+        justify-content: space-between;
+        gap: 4mm;
+        align-items: baseline;
+      }
+      .what {
+        font-weight: 600;
+        font-size: 10.4pt;
+      }
+      .when {
+        font: 8pt 'Geist Mono', monospace;
+        color: var(--muted);
+        white-space: nowrap;
+      }
+      .sub {
+        color: var(--muted);
+        font-size: 9pt;
+      }
+      ul {
+        margin-top: 1.5mm;
+        padding-left: 4mm;
+      }
+      li {
+        margin-top: 0.8mm;
+      }
+      li::marker {
+        color: var(--gold);
+      }
+      .stack {
+        margin-top: 1.8mm;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.2mm;
+      }
+      .stack span {
+        font: 7.6pt 'Geist Mono', monospace;
+        border: 1px solid var(--line);
+        border-radius: 99px;
+        padding: 0.3mm 2mm;
+        color: var(--muted);
+      }
+      .link {
+        font: 8pt 'Geist Mono', monospace;
+        color: var(--gold);
+      }
+      .profile {
+        font-size: 10pt;
+        line-height: 1.6;
+      }
+
+      /* Skills table */
+      .skills {
+        display: grid;
+        grid-template-columns: 27mm 1fr;
+        gap: 1.4mm 4mm;
+      }
+      .skills dt {
+        font-weight: 600;
+        font-size: 9pt;
+      }
+      .skills dd {
+        color: var(--ink);
+      }
+
+      /* Leadership role ladder */
+      .roles {
+        margin-top: 2mm;
+        border-left: 1.5px solid var(--line);
+        padding-left: 4mm;
+        list-style: none;
+      }
+      .roles li {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        gap: 4mm;
+      }
+      .roles li::before {
+        content: '';
+        position: absolute;
+        left: -5.6mm;
+        top: 1.7mm;
+        width: 2.2mm;
+        height: 2.2mm;
+        border-radius: 50%;
+        background: var(--line);
+      }
+      .roles li:first-child::before {
+        background: var(--gold);
+      }
+
+      footer {
+        margin-top: auto;
+        padding-top: 4mm;
+        border-top: 1px solid var(--line);
+        display: flex;
+        justify-content: space-between;
+        font: 7.6pt 'Geist Mono', monospace;
+        color: var(--muted);
+      }
+      .note {
+        background: var(--soft);
+        border-radius: 3mm;
+        padding: 4mm 5mm;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ======================= PAGE 1 ======================= -->
+    <div class="page">
+      <header>
+        <img src="../public/me.webp" alt="" />
+        <div>
+          <h1>Shuhari Alaihim D. Amoran</h1>
+          <p class="title">Aspiring Software Developer</p>
+          <p class="contact">
+            <span><b>Esperanza, Sultan Kudarat</b>, Philippines</span>
+            <span>shuharidalandas@gmail.com</span>
+            <span>shuhari-dev.vercel.app</span>
+            <span>github.com/iamShu21</span>
+            <span>linkedin.com/in/shuhari-alaihim-amoran-792918414</span>
+          </p>
+        </div>
+      </header>
+
+      <section>
+        <h2>Profile</h2>
+        <p class="profile">
+          Aspiring software developer and BS Information Technology student at Notre Dame of Marbel University. I build full-stack web apps, desktop systems
+          and mobile AR: a payment portal with online checkout for a student government, a point-of-sale system in Java, and, with a team of three,
+          ExploreNDMU, an augmented-reality campus navigation app for Android. I work across the stack, from MySQL schemas and Express APIs to React and
+          Unity interfaces, and I have held a student-organisation role every year since 2023. Open to commissions.
+        </p>
+      </section>
+
+      <section>
+        <h2>Projects</h2>
+        <div>
+          <div class="entry">
+            <div class="row">
+              <p class="what">ExploreNDMU <span class="sub">· AR campus navigation app (Android)</span></p>
+              <p class="when">2026</p>
+            </div>
+            <p class="sub">Capstone project · Full-stack developer in a team of three</p>
+            <ul>
+              <li>Gold AR arrows lead visitors along routes surveyed on foot across the NDMU campus, with a voice for every turn, a narrated campus tour, a 42-place building directory and 3D models on printed markers.</li>
+              <li>60 walks recorded on campus, joined at 39 junctions into 1,194 routes with Dijkstra’s algorithm.</li>
+              <li>Works with no signal: routes, place cards and voice lines ship inside the app.</li>
+            </ul>
+            <div class="stack"><span>Unity 6</span><span>C#</span><span>AR Foundation</span><span>ARCore</span><span>Android</span><span>QGIS</span></div>
+            <p class="link" style="margin-top: 1.5mm">explorendmu.github.io</p>
+          </div>
+
+          <div class="entry">
+            <div class="row">
+              <p class="what">SSG Payment System <span class="sub">· full-stack web app</span></p>
+              <p class="when">2026</p>
+            </div>
+            <p class="sub">Class project · Payment portal designed for NDMU’s Supreme Student Government</p>
+            <ul>
+              <li>Three roles (moderator, officer, student) behind JWT login, each with its own dashboard: moderators set up fees and officers, students pay and track what they owe, officers review payments.</li>
+              <li>Online checkout through PayMongo (GCash, Maya, card); receipts with yearly sequential numbers, downloadable as PDF.</li>
+              <li>Express REST API on MySQL with SQL migrations, audit logs, reports and notifications; React and Tailwind front end with light and dark themes.</li>
+            </ul>
+            <div class="stack"><span>React</span><span>Tailwind CSS</span><span>Node.js</span><span>Express</span><span>MySQL</span><span>JWT</span><span>PayMongo</span></div>
+            <p class="link" style="margin-top: 1.5mm">github.com/iamShu21/ssg-payment-system</p>
+          </div>
+
+          <div class="entry">
+            <div class="row">
+              <p class="what">Point-of-Sale System <span class="sub">· desktop app</span></p>
+              <p class="when">2026</p>
+            </div>
+            <ul>
+              <li>A register with a cart, running totals, automatic change and receipts, plus product, category, inventory, supplier and staff management, reports, sales history and a login history (11 screens).</li>
+              <li>Custom Swing UI kit (glass panels, gradient and neon buttons, rounded inputs) on a MySQL database over JDBC; rebuilt from my first version with a redesigned interface and more modules.</li>
+            </ul>
+            <div class="stack"><span>Java</span><span>Swing</span><span>MySQL</span><span>JDBC</span><span>NetBeans</span></div>
+            <p class="link" style="margin-top: 1.5mm">github.com/iamShu21/final-pos-system</p>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <span>Shuhari Alaihim D. Amoran · CV</span>
+        <span>page 1 of 2</span>
+      </footer>
+    </div>
+
+    <!-- ======================= PAGE 2 ======================= -->
+    <div class="page">
+      <section style="padding-top: 0">
+        <h2>Technical skills</h2>
+        <dl class="skills">
+          <dt>Languages</dt>
+          <dd>Java, C#, C++, JavaScript, TypeScript, SQL</dd>
+          <dt>Web</dt>
+          <dd>HTML5, CSS3, React, Next.js, Astro, Tailwind CSS</dd>
+          <dt>Back end</dt>
+          <dd>Node.js, Express.js, Laravel, REST APIs, JWT authentication, PayMongo checkout</dd>
+          <dt>Mobile &amp; AR</dt>
+          <dd>Unity (uGUI, TextMeshPro, DOTween), AR Foundation, ARCore, Android, Flutter</dd>
+          <dt>Desktop</dt>
+          <dd>Java Swing, JDBC, NetBeans</dd>
+          <dt>Databases</dt>
+          <dd>MySQL, Oracle Database, SQLite</dd>
+          <dt>Tools</dt>
+          <dd>Git, GitHub, GitHub Pages, Vercel</dd>
+          <dt>GIS &amp; 3D</dt>
+          <dd>QGIS (mapping), Blender (3D modelling)</dd>
+        </dl>
+      </section>
+
+      <section>
+        <h2>Education</h2>
+        <div>
+          <div class="entry">
+            <div class="row">
+              <p class="what">Bachelor of Science in Information Technology</p>
+              <p class="when">2023 – present</p>
+            </div>
+            <p class="sub">Notre Dame of Marbel University · Koronadal City, South Cotabato</p>
+            <ul>
+              <li>Capstone: ExploreNDMU, an augmented-reality campus navigation app for Android (2026).</li>
+              <li>Class project: SSG Payment System, a fee and payment portal with online checkout (2026).</li>
+            </ul>
+          </div>
+          <div class="entry">
+            <div class="row">
+              <p class="what">Senior High School · Science, Technology, Engineering and Mathematics (STEM)</p>
+              <p class="when">2021 – 2023</p>
+            </div>
+            <p class="sub">Notre Dame of Esperanza Inc. · Esperanza, Sultan Kudarat</p>
+          </div>
+          <div class="entry">
+            <div class="row">
+              <p class="what">Junior High School</p>
+              <p class="when">2017 – 2021</p>
+            </div>
+            <p class="sub">Notre Dame of Esperanza Inc. · Esperanza, Sultan Kudarat</p>
+          </div>
+          <div class="entry">
+            <div class="row">
+              <p class="what">Elementary</p>
+              <p class="when">2010 – 2017</p>
+            </div>
+            <p class="sub">Esperanza Elementary School · Esperanza, Sultan Kudarat</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Leadership &amp; activities</h2>
+        <div>
+          <div class="entry">
+            <div class="row">
+              <p class="what">Philippine Society of Information Technology Students (PSITS)</p>
+              <p class="when">2023 – 2026</p>
+            </div>
+            <p class="sub">NDMU chapter · three consecutive school years</p>
+            <ol class="roles">
+              <li><span>Batch Representative</span><span class="when">2025 – 2026</span></li>
+              <li><span>Auditor</span><span class="when">2024 – 2025</span></li>
+              <li><span>Batch Representative</span><span class="when">2023 – 2024</span></li>
+            </ol>
+          </div>
+          <div class="entry">
+            <div class="row">
+              <p class="what">Muslim Students Organization (MSO)</p>
+              <p class="when">2024 – 2025</p>
+            </div>
+            <p class="sub">Notre Dame of Marbel University</p>
+            <ol class="roles">
+              <li><span>Representative</span><span class="when">2024 – 2025</span></li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Online</h2>
+        <div class="note">
+          <p>
+            Portfolio with project write-ups and a hands-on AR demo of ExploreNDMU: <b style="white-space: nowrap">shuhari-dev.vercel.app</b>
+          </p>
+          <p class="sub" style="margin-top: 1.5mm">Code: github.com/iamShu21 · LinkedIn: linkedin.com/in/shuhari-alaihim-amoran-792918414</p>
+        </div>
+      </section>
+
+      <section>
+        <h2>References</h2>
+        <p>Available upon request.</p>
+      </section>
+
+      <footer>
+        <span>Shuhari Alaihim D. Amoran · CV</span>
+        <span>page 2 of 2</span>
+      </footer>
+    </div>
+  </body>
+</html>

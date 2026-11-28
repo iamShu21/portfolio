@@ -90,7 +90,7 @@ export function CvDialog() {
               src={BASE + cv.image}
               width={cv.w}
               height={cv.h}
-              alt={`CV of ${profile.name}: education (BS Information Technology at Notre Dame of Marbel University, 2023 to present), student organisation roles in PSITS and the Muslim Students Organization, and skills in programming, web, mobile and AR development, databases, GIS and 3D modelling.`}
+              alt={`Two-page CV of ${profile.name}, aspiring software developer from Esperanza, Sultan Kudarat. Page 1: profile and three projects (ExploreNDMU, an AR campus navigation app; SSG Payment System, a full-stack payment portal; a Java point-of-sale system). Page 2: technical skills, education (BS Information Technology at Notre Dame of Marbel University, 2023 to present), leadership in PSITS and the Muslim Students Organization, and links.`}
               decoding="async"
               className="block h-auto w-full rounded-xl bg-white"
             />

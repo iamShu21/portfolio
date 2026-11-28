@@ -20,7 +20,8 @@ export const profile = {
    * CV shown in a dialog, with a PDF to download. Files live in public/cv/. This copy leaves out
    * the phone number, birth date and home address. Set `cv: null` to hide the CV buttons.
    */
-  cv: { image: 'cv/shuhari-amoran-cv.webp', pdf: 'cv/Shuhari-Amoran-CV.pdf', w: 1415, h: 1820 } as {
+  // Both CV files come from cv-source/cv.html (two A4 pages; how to export is in that file).
+  cv: { image: 'cv/shuhari-amoran-cv.webp', pdf: 'cv/Shuhari-Amoran-CV.pdf', w: 1588, h: 4612 } as {
     image: string
     pdf: string
     w: number
